@@ -20,14 +20,32 @@ busy = threading.Lock()
 
 def canonical(value):
     if not isinstance(value, str) or len(value) > 2048:
-        raise ValueError('Cole o link de um Reel público do Instagram.')
-    url = urlsplit(value.strip())
-    if url.scheme != 'https' or url.netloc.lower() not in ('instagram.com', 'www.instagram.com', 'm.instagram.com'):
-        raise ValueError('Use um link https://www.instagram.com/reel/...')
-    match = re.fullmatch(r'/(?:reel|reels|p)/([A-Za-z0-9_-]{5,40})/?', url.path)
-    if not match:
-        raise ValueError('Use o link de um único vídeo público, não um perfil ou Story.')
-    return 'https://www.instagram.com/p/' + match[1] + '/'
+        raise ValueError('Cole um link público de vídeo do Instagram ou Facebook.')
+    value = value.strip()
+    url = urlsplit(value)
+    if url.scheme != 'https':
+        raise ValueError('Use um link https público do Instagram ou Facebook.')
+    host = url.netloc.lower().split(':', 1)[0].rstrip('.')
+
+    if host in ('instagram.com', 'www.instagram.com', 'm.instagram.com'):
+        match = re.fullmatch(r'/(?:reel|reels|p)/([A-Za-z0-9_-]{5,40})/?', url.path)
+        if match:
+            return 'https://www.instagram.com/p/' + match[1] + '/'
+        raise ValueError('Use o link de um Reel ou vídeo individual do Instagram.')
+
+    if host in ('facebook.com', 'www.facebook.com', 'm.facebook.com', 'web.facebook.com'):
+        is_reel = re.fullmatch(r'/(?:reel|reels)/[0-9]+/?', url.path)
+        is_video = re.fullmatch(r'/(?:[^/]+/)?videos/[0-9]+/?', url.path)
+        is_watch = url.path.rstrip('/') == '/watch' and bool(url.query)
+        is_shared_video = re.fullmatch(r'/share/v/[A-Za-z0-9_-]+/?', url.path)
+        if is_reel or is_video or is_watch or is_shared_video:
+            return value
+        raise ValueError('Use o link de um Reel ou vídeo individual público do Facebook.')
+
+    if host == 'fb.watch' and re.fullmatch(r'/[A-Za-z0-9_-]+/?', url.path):
+        return value
+
+    raise ValueError('Use um link público do Instagram ou Facebook.')
 
 def update(job, **fields):
     with lock:
@@ -42,10 +60,10 @@ def run(job, url):
             result = subprocess.run(command, capture_output=True, timeout=120)
             for metadata in Path(folder).glob('*.info.json'):
                 if json.loads(metadata.read_text()).get('_type') in ('playlist', 'multi_video'):
-                    raise ValueError('Carrosséis não são aceitos. Cole o link de um Reel individual.')
+                    raise ValueError('Carrosséis não são aceitos. Cole o link de um Reel ou vídeo individual.')
             files = list(Path(folder).glob('*.mp4'))
             if result.returncode or len(files) != 1:
-                raise ValueError('Não consegui obter um vídeo único desse link. O Instagram pode exigir login ou limitar o acesso. Carrosséis não são aceitos.')
+                raise ValueError('Não consegui obter um vídeo único desse link. A plataforma pode exigir login, limitar o acesso ou o link pode ser de um carrossel.')
             if files[0].stat().st_size > 32 * 1024 * 1024:
                 raise ValueError('Vídeo maior que o limite de 32 MB.')
             probe = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'json', str(files[0])], capture_output=True, check=True, timeout=15)
@@ -131,12 +149,12 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError('Pedido inválido.')
             url = canonical(json.loads(self.rfile.read(size)).get('url'))
         except (ValueError, AttributeError):
-            return self.reply(400, {'message': 'Cole um link válido de Reel ou vídeo público do Instagram.'})
+            return self.reply(400, {'message': 'Cole um link válido de Reel ou vídeo público do Instagram ou Facebook.'})
         if not busy.acquire(blocking=False):
             return self.reply(429, {'message': 'Já existe uma transcrição em andamento. Aguarde terminar.'})
         job = secrets.token_urlsafe(24)
         with lock:
-            jobs[job] = {'status': 'downloading', 'message': 'Buscando o vídeo no Instagram…'}
+            jobs[job] = {'status': 'downloading', 'message': 'Buscando o vídeo…'}
         threading.Thread(target=run, args=(job, url), daemon=True).start()
         self.reply(202, {'id': job})
 
