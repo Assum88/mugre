@@ -1,4 +1,3 @@
-import hmac
 import json
 import os
 from pathlib import Path
@@ -13,7 +12,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).parent
-KEY = os.environ.get('MUGRE_ACCESS_KEY', '')
 jobs = {}
 lock = threading.Lock()
 busy = threading.Lock()
@@ -117,12 +115,6 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def authorized(self):
-        if not KEY:
-            self.reply(503, {'message': 'O acesso ainda precisa ser configurado.'})
-            return False
-        if not hmac.compare_digest(self.headers.get('Authorization', ''), 'Bearer ' + KEY):
-            self.reply(401, {'message': 'Informe o código de acesso do seu app.'})
-            return False
         return True
 
     def do_GET(self):
