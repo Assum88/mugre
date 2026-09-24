@@ -35,7 +35,7 @@ def canonical(value):
         is_reel = re.fullmatch(r'/(?:reel|reels)/[0-9]+/?', url.path)
         is_video = re.fullmatch(r'/(?:[^/]+/)?videos/[0-9]+/?', url.path)
         is_watch = url.path.rstrip('/') == '/watch' and bool(url.query)
-        is_shared_video = re.fullmatch(r'/share/v/[A-Za-z0-9_-]+/?', url.path)
+        is_shared_video = re.fullmatch(r'/share/[vr]/[A-Za-z0-9_-]+/?', url.path)
         if is_reel or is_video or is_watch or is_shared_video:
             return value
         raise ValueError('Use o link de um Reel ou vídeo individual público do Facebook.')
