@@ -66,7 +66,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .now .what{font-size:16px;opacity:.95}
 .now .btn.primary{background:var(--on-sea);color:var(--sea)}
 
-.dateline{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:15px;margin-block:2px 22px}
+.dateline{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:15px;margin-block:2px 4px}
 .icon-btn.sm{width:36px;height:36px;border-radius:10px;font-size:18px}
 .icon-btn.wide{width:auto;padding-inline:10px;font-size:13px;font-weight:700}
 .focus{display:grid;gap:12px;padding-block:6px 26px}
@@ -86,6 +86,20 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .fixedline{font-size:14px;color:var(--muted);margin:22px 0 4px}
 .plan-h{font:800 30px/1.05 var(--display);letter-spacing:-.02em;margin:0 0 14px}
 .tm small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.wheel{position:relative;height:350px;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;padding-block:75px;-webkit-mask-image:linear-gradient(rgba(0,0,0,.25),#000 24%,#000 76%,rgba(0,0,0,.25));mask-image:linear-gradient(rgba(0,0,0,.25),#000 24%,#000 76%,rgba(0,0,0,.25));outline-offset:4px}
+.wheel::-webkit-scrollbar{display:none}
+.wi{height:200px;scroll-snap-align:center;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;gap:10px;transform-origin:center;will-change:transform,opacity;overflow:hidden}
+.wi .wh{font:800 clamp(30px,8.6vw,42px)/1.03 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wi .ctx{font-size:16px;color:var(--muted);margin:0;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.wi.is-past .wh{color:var(--muted)}
+.wi .clock{margin-top:2px}
+.wact{margin-top:6px}
+.hint.center{text-align:center}
+.sim{background:var(--surface);border:1.5px dashed var(--sea);border-radius:16px;padding:12px 14px;display:grid;gap:10px;margin-bottom:14px}
+.simclock{font:800 22px/1 var(--display);font-variant-numeric:tabular-nums;color:var(--sea)}
+.sim input[type=range]{width:100%;accent-color:var(--sea)}
+.btn.sm{min-height:38px;padding:7px 12px;font-size:14px}
+.field.sm{min-height:38px;padding:7px 10px;font-size:14px;width:auto;flex:1 1 160px;min-width:0}
 .ask{background:var(--sun-soft);color:var(--ink);border-radius:18px;padding:14px 16px;display:grid;gap:10px;margin-block:6px 10px}
 .ask p{margin:0}
 
@@ -204,10 +218,12 @@ const MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto
 const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
-const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+let SIM={on:false,date:'',m:420};
+const realToday=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const today=()=>SIM.on?parse(SIM.date):realToday();
 const ddmm=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
 const mins=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
-const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes()};
+const nowMin=()=>{if(SIM.on)return SIM.m;const n=new Date();return n.getHours()*60+n.getMinutes()};
 
 /* ---------- Dados iniciais (do que você contou) ---------- */
 const PANTRY0=[
@@ -274,12 +290,12 @@ let doneMap=S.get('done',{});
 let ref=S.get('ref','2026-10-23');
 let tab=S.get('tab','hoje');
 let sel=today();
-let editPantry=false, editPlaces=false, whyOpen=false, showAll=false;
+let editPantry=false, editPlaces=false, whyOpen=false, showAll=false, wheelId=null, curId=null, lastState=null, wheelT=null;
 let later=S.get('later',{});
 let reminders=S.get('reminders',null)||[{id:'r1',what:'Exemplo: comprar carne',where:'Açougue no caminho de casa'}];
 if(S.get('v',1)<2){if(!pantry.some(p=>p.n==='Aveia'))pantry.push({n:'Aveia',c:'Mercearia',have:true});S.set('v',2)}
 
-const save=()=>{S.set('pantry',pantry);S.set('places',places);S.set('tasks',tasks);S.set('shifts',shifts);S.set('done',doneMap);S.set('ref',ref);S.set('later',later);S.set('reminders',reminders)};
+const save=()=>{if(SIM.on)return;S.set('pantry',pantry);S.set('places',places);S.set('tasks',tasks);S.set('shifts',shifts);S.set('done',doneMap);S.set('ref',ref);S.set('later',later);S.set('reminders',reminders)};
 const has=n=>{const p=pantry.find(x=>x.n===n);return !!(p&&p.have)};
 const shiftOf=(dk,id)=>(shifts[dk]&&shifts[dk][id])||0;
 
@@ -315,11 +331,11 @@ const HABITS=[
 const CAFE_ISR={id:'cafe',ctx:'Café da manhã do Israel',pool:'cafe',until:'09:00',isr:1,why:'Depois das 9 embola com o almoço das 11 e tira a fome dele.',
   late:{at:'08:40',ctx:'Café leve pra enganar a fome',pool:'leve',until:'10:00',why:'Ficou tarde pro café completo. Algo leve segura até o almoço das 11.'}};
 const CAFE_SOLO={id:'cafe',ctx:'Seu café da manhã',pool:'cafe',until:'09:00',skipAfter:1,why:'Comer cedo ajuda a não travar o resto do dia.'};
-const LANCHEIRA={id:'lancheira',ctx:'Lancheira da escola',head:'Montar a lancheira',merenda:1,until:'13:00',isr:1,why:'Pode ser agora ou depois do banho, enquanto ele vê desenho. Às 13:00 tem que estar pronta. Se quiser deixar pra depois, toque em Depois.'};
+const LANCHEIRA={id:'lancheira',ctx:'Lancheira da escola',head:'Montar a lancheira',merenda:1,until:'13:00',isr:1,why:'Depois do banho, enquanto ele vê desenho. Às 13:00 tem que estar pronta. Se der tempo antes, pode adiantar.'};
 const BRINCAR={id:'brincar',ctx:'Até a hora do almoço',pool:'manha',until:'10:45',isr:1,skipAfter:1,why:'Às 11 vocês saem pra almoçar. Até lá, uma atividade perto de casa.'};
 const ALMOCO_ISR={id:'almoco',ctx:'Almoço com Israel · sair às 11h',pool:'almocoIsr',from:'10:45',until:'12:00',isr:1,why:'Às 11 os lugares estão vazios e a comida está mais fresca.',
   late:{at:'12:00',ctx:'Almoço perto da escola',pool:'almocoEscola',until:'13:15',why:'Ficou tarde. Almoça do lado da escola e de lá já entra. Se der, o banho vem antes de sair.'}};
-const BANHO={id:'banho',ctx:'Antes da escola',head:'Banho e roupa da escola',until:'13:00',isr:1,skipIfLateLunch:1,why:'Às 13:00 tem que estar tudo pronto. A escola entra 13:30.'};
+const BANHO={id:'banho',ctx:'Antes da escola',head:'Banho e roupa da escola',until:'12:45',isr:1,skipIfLateLunch:1,why:'Às 13:00 tem que estar tudo pronto. A escola entra 13:30.'};
 const ESCOLA={id:'escola',ctx:'Horário fixo',head:'Levar o Israel pra escola',until:'13:30',fixed:'13:30 escola',isr:1,why:'A entrada é às 13:30.'};
 const BUSCAR={id:'buscar',ctx:'Horário fixo',head:'Buscar o Israel na escola',from:'17:30',until:'18:00',fixed:'18:00 saída da escola',isr:1,why:'A escola libera às 18:00.'};
 const REVISAO={id:'revisao',ctx:'Antes de dormir',head:'Revisão do dia',detail:'Marque o que fez e dê uma olhada no amanhã.',until:'22:00',why:'Dois minutos olhando o amanhã tiram o peso da manhã seguinte.'};
@@ -455,21 +471,28 @@ function dayState(d){
   const dk=key(d), live=dk===key(today()), nm=live?nowMin():-1;
   let ti=0;
   let list=routine(d).map(st=>{const r=resolve(st,d,nm,live,ti);if(r.tarefa&&!r.done)ti++;return r});
-  (later[dk]||[]).forEach(id=>{
-    const i=list.findIndex(s=>s.id===id);if(i<0)return;
-    const [s]=list.splice(i,1);
-    let j=list.findIndex((x,k)=>k>=i&&(x.fixed||x.id==='revisao'));
-    if(j<0)j=list.length;
-    list.splice(j,0,s);
-  });
   const lateLunch=list.some(s=>s.id==='almoco'&&s.late);
   list.forEach((s,i)=>{
-    s.prev=i?list[i-1].until:null;
     s.skipped=live&&!s.done&&(
       (!s.fixed&&nm>=mins(s.until)+(s.skipAfter?0:30))||
       (s.skipIfLateLunch&&lateLunch)||
+      (!s.fixed&&list.some((x,j)=>j>i&&x.fixed&&nm>=mins(x.from||x.until)))||
       (s.fixed&&nm>=(s.end?mins(s.end):mins(s.until)+20)));
   });
+  if(live){
+    // O que vence antes vem primeiro; "Depois" deixa passar o próximo passo na frente
+    const idx=new Map(list.map((s,i)=>[s,i])), notYet=s=>s.from&&nm<mins(s.from)?1:0;
+    const past=list.filter(s=>s.done||s.skipped), pend=list.filter(s=>!s.done&&!s.skipped);
+    pend.sort((a,b)=>mins(a.until)-mins(b.until)||idx.get(a)-idx.get(b));
+    if(pend[0]&&notYet(pend[0])){const i=pend.findIndex(x=>!notYet(x));if(i>0)pend.unshift(pend.splice(i,1)[0])}
+    const L=Array.isArray(later[dk])?{}:(later[dk]||{});
+    Object.keys(L).forEach(id=>{
+      const i=pend.findIndex(s=>s.id===id);if(i<0||!pend.some(s=>s.id===L[id]))return;
+      const [s]=pend.splice(i,1);pend.splice(pend.findIndex(x=>x.id===L[id])+1,0,s);
+    });
+    list=past.concat(pend);
+  }
+  list.forEach((s,i)=>{s.prev=i?list[i-1].until:null});
   return{dk,live,nm,list};
 }
 
@@ -482,7 +505,7 @@ function clock(s,nm){
     return{n:'passou '+fmtDur(nm-u),l:`era ${s.until}`,warn:true};
   }
   if(s.from&&nm<mins(s.from))return{n:fmtDur(mins(s.from)-nm),l:`pra começar · às ${s.from}`};
-  if(nm<u)return{n:fmtDur(u-nm),l:`até ${s.until}`,warn:u-nm<10};
+  if(nm<=u)return{n:fmtDur(u-nm),l:`até ${s.until}`,warn:u-nm<10};
   return{n:'passou '+fmtDur(nm-u),l:`era até ${s.until}`,warn:true};
 }
 function progress(s,nm){
@@ -504,29 +527,86 @@ function dayList(st){
     return`<div class="blk${s.done?' done':''}${s.skipped?' past':''}"><div class="tm">${left}</div><div><div class="note">${esc(s.ctx)}</div><div class="ttl"><span class="t">${esc(s.head)}</span></div>${s.detail?`<div class="alts">${esc(s.detail)}</div>`:''}<div class="mini">${status}</div></div></div>`;
   }).join('')}</div>`;
 }
+function wheelItem(s,isCur,nm){
+  let meta;
+  if(isCur){const k=clock(s,nm);meta=`<div class="clock${k.warn?' warn':''}"><span class="n">${esc(k.n)}</span><span class="until">${esc(k.l)}</span></div><div class="bar"><i style="width:${progress(s,nm)}%"></i></div>`}
+  else if(s.done)meta='<div class="clock"><span class="until">Feito ✓</span></div>';
+  else if(s.skipped)meta='<div class="clock"><span class="until">Passou</span></div>';
+  else meta=`<div class="clock"><span class="until">${s.fixed?s.until+' · horário fixo':'até '+s.until}</span></div>`;
+  return`<div class="wi${isCur?' is-cur':''}${s.done||s.skipped?' is-past':''}" data-id="${s.id}"${isCur?' data-cur="1"':''}><div class="eyebrow">${isCur?'Agora · ':''}${esc(s.ctx)}</div><h2 class="wh">${esc(s.head)}</h2>${s.detail?`<p class="ctx">${esc(s.detail)}</p>`:''}${meta}</div>`;
+}
+function renderActions(){
+  const box=$('#wact');if(!box||!lastState)return;
+  const list=lastState.list, s=list.find(x=>x.id===wheelId)||list.find(x=>x.id===curId);if(!s)return;
+  const rest=list.filter(x=>!x.done&&!x.skipped), isCur=s.id===curId;
+  const canLater=isCur&&!s.fixed&&rest[1]&&!rest[1].fixed;
+  let b='';
+  if(s.done)b=`<button class="btn soft" data-a="undo" data-v="${s.id}">Desfazer</button>`;
+  else if(!s.skipped)b=`<button class="btn primary" data-a="feito" data-v="${s.id}">Feito</button>${s.swap?`<button class="btn soft" data-a="swap" data-v="${s.sk}">Trocar</button>`:''}${canLater?`<button class="btn soft" data-a="later" data-v="${s.id}">Depois</button>`:''}`;
+  b+=`<button class="q" data-a="why" aria-expanded="${whyOpen}" aria-label="Por que esse prazo?">?</button>`;
+  b+=isCur?`<button class="link" data-a="bora" data-v="${s.id}">Começar 5 min</button>`:'<button class="link" data-a="gonow">Voltar pro agora</button>';
+  box.innerHTML=`<div class="row wact">${b}</div>${whyOpen&&s.why?`<p class="why">${esc(s.why)}</p>`:''}`;
+}
+const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function paintWheel(){
+  const w=$('#wheel');if(!w)return;
+  const c=w.scrollTop+w.clientHeight/2, rm=reduceMotion();
+  w.querySelectorAll('.wi').forEach(el=>{
+    const d=(el.offsetTop+el.offsetHeight/2-c)/el.offsetHeight, a=Math.min(Math.abs(d),1.6);
+    el.style.transform=rm?'':`perspective(900px) rotateX(${(-d*26).toFixed(1)}deg) scale(${(1-a*.12).toFixed(3)})`;
+    el.style.opacity=(1-a*.42).toFixed(2);
+  });
+}
+function centered(){
+  const w=$('#wheel');if(!w)return null;
+  const c=w.scrollTop+w.clientHeight/2;let best=null,bd=1e9;
+  w.querySelectorAll('.wi').forEach(el=>{const d=Math.abs(el.offsetTop+el.offsetHeight/2-c);if(d<bd){bd=d;best=el}});
+  return best;
+}
+function centerOn(el,smooth){const w=$('#wheel');if(w&&el)w.scrollTo({top:el.offsetTop-(w.clientHeight-el.offsetHeight)/2,behavior:smooth&&!reduceMotion()?'smooth':'auto'})}
+function setupWheel(){
+  const w=$('#wheel');if(!w)return;
+  const target=(wheelId&&w.querySelector(`.wi[data-id="${wheelId}"]`))||w.querySelector('.wi[data-cur]');
+  centerOn(target,false);paintWheel();renderActions();
+  w.addEventListener('scroll',()=>{
+    paintWheel();clearTimeout(wheelT);
+    wheelT=setTimeout(()=>{const el=centered();if(el&&el.dataset.id!==(wheelId||curId)){wheelId=el.dataset.id===curId?null:el.dataset.id;whyOpen=false;renderActions()}},110);
+  },{passive:true});
+}
+function nextDays(){const t=realToday(),o=[];for(let i=0;i<14;i++){const d=add(t,i);o.push({k:key(d),l:`${WDS[d.getDay()]} ${ddmm(d)} · ${custody(d).label}`})}return o}
+function simBar(){
+  const hh=String(Math.floor(SIM.m/60)).padStart(2,'0')+':'+String(SIM.m%60).padStart(2,'0');
+  return`<div class="sim"><div class="row" style="justify-content:space-between"><b>Simulação</b><span class="simclock" id="simLbl">${hh}</span><button class="link" data-a="simexit">Sair</button></div>
+  <input type="range" id="simT" min="360" max="1350" step="15" value="${SIM.m}" aria-label="Hora simulada">
+  <div class="row"><button class="btn soft sm" data-a="simstep" data-v="-30">−30 min</button><button class="btn soft sm" data-a="simstep" data-v="30">+30 min</button><select class="field sm" id="simDay" aria-label="Dia simulado">${nextDays().map(o=>`<option value="${o.k}"${o.k===SIM.date?' selected':''}>${esc(o.l)}</option>`).join('')}</select></div>
+  <p class="hint" style="margin:0">Nada do que você marcar aqui fica salvo.</p></div>`;
+}
+function startSim(){
+  const t=realToday();let d=add(t,1);while(!(d.getDay()===2))d=add(d,1);
+  SIM={on:true,date:key(d),m:450};
+  doneMap={};later={};shifts={};tasks=JSON.parse(JSON.stringify(tasks));
+  sel=today();tab='hoje';wheelId=null;whyOpen=false;closeSheet();render();window.scrollTo(0,0);
+}
+function exitSim(){
+  SIM.on=false;
+  pantry=S.get('pantry',null)||freshPantry();tasks=S.get('tasks',null)||freshTasks();
+  shifts=S.get('shifts',{});doneMap=S.get('done',{});later=S.get('later',{});
+  sel=today();wheelId=null;render();
+}
 function viewHoje(){
   const d=sel, c=custody(d), st=dayState(d), {live,nm,list}=st;
   let h='';
-  if(!S.get('refOk',false))h+=refAsk();
+  if(SIM.on)h+=simBar();
+  else if(!S.get('refOk',false))h+=refAsk();
   h+=`<div class="dateline"><span>${live?'Hoje, ':''}${WD[d.getDay()].toLowerCase()}, ${d.getDate()} de ${MES[d.getMonth()]} · ${esc(c.label)}</span><span class="arrows"><button class="icon-btn sm" data-a="day" data-v="-1" aria-label="Dia anterior">‹</button>${live?'':'<button class="icon-btn sm wide" data-a="day" data-v="0">Hoje</button>'}<button class="icon-btn sm" data-a="day" data-v="1" aria-label="Próximo dia">›</button></span></div>`;
   if(!live){
     h+=`<h1 class="plan-h">Plano de ${WD[d.getDay()].toLowerCase()}</h1>`+dayList(st);
     return h;
   }
   const rest=list.filter(s=>!s.done&&!s.skipped), cur=rest[0];
+  lastState=st; curId=cur?cur.id:null;
   if(cur){
-    const k=clock(cur,nm), canLater=!cur.fixed&&rest[1]&&!rest[1].fixed;
-    h+=`<section class="focus" aria-label="Agora">
-      <div class="eyebrow">${esc(cur.ctx)}</div>
-      <h1>${esc(cur.head)}</h1>
-      ${cur.detail?`<p class="ctx">${esc(cur.detail)}</p>`:''}
-      <div class="clock${k.warn?' warn':''}"><span class="n">${esc(k.n)}</span><span class="until">${esc(k.l)}</span><button class="q" data-a="why" aria-expanded="${whyOpen}" aria-label="Por que esse prazo?">?</button></div>
-      <div class="bar"><i style="width:${progress(cur,nm)}%"></i></div>
-      ${whyOpen?`<p class="why">${esc(cur.why||'')}</p>`:''}
-      <div class="row"><button class="btn primary" data-a="feito" data-v="${cur.id}">Feito</button>${cur.swap?`<button class="btn soft" data-a="swap" data-v="${cur.sk}">Trocar</button>`:''}${canLater?`<button class="btn soft" data-a="later" data-v="${cur.id}">Depois</button>`:''}<button class="link" data-a="bora" data-v="${cur.id}">Começar 5 min</button></div>
-    </section>`;
-    const nx=rest.slice(1,3);
-    if(nx.length)h+=`<section class="next"><div class="eyebrow">Depois</div>${nx.map(s=>`<div class="nx"><div><div class="h">${esc(s.head)}</div>${s.detail?`<div class="d">${esc(s.detail)}</div>`:''}</div><div class="u">${s.fixed?s.until:'até '+s.until}</div></div>`).join('')}</section>`;
+    h+=`<div class="wheel" id="wheel" tabindex="0" aria-label="Tarefas do dia. Deslize pra espiar as outras.">${list.map(s=>wheelItem(s,s===cur,nm)).join('')}</div><div id="wact"></div><p class="hint center">Deslize pra espiar o resto do dia</p>`;
   }else{
     h+=`<section class="focus"><div class="eyebrow">Dia encerrado</div><h1>Bom descanso.</h1><p class="ctx">Amanhã já está planejado.</p><div class="row"><button class="btn primary" data-a="day" data-v="1">Ver amanhã</button></div></section>`;
   }
@@ -608,6 +688,7 @@ function render(){
   $('#view').innerHTML=(V[tab]||viewHoje)();
   document.querySelectorAll('.nav button').forEach(b=>b.toggleAttribute('aria-current',b.dataset.v===tab));
   document.querySelectorAll('.nav button[aria-current]').forEach(b=>b.setAttribute('aria-current','page'));
+  if(tab==='hoje')setupWheel();
 }
 
 /* ---------- Painéis: cronômetro, Travei, ajustes ---------- */
@@ -654,6 +735,7 @@ function drawSettings(confirmReset){
   openSheet(`<div class="head"><h2>Ajustes</h2><button class="x" data-a="close" aria-label="Fechar">×</button></div>
   <div><label class="lbl" for="refIn">Uma sexta em que o fim de semana é com Israel</label><input class="field" type="date" id="refIn" value="${ref}"><p class="hint">O app alterna de 15 em 15 dias a partir dessa data.</p></div>
   <div class="soon"><b>Em breve: aprender com o seu histórico.</b><br>Cruzar Maps, cartão, Pix e agenda pra entender seus dias anteriores e melhorar as sugestões. Tudo guardado só no aparelho.</div>
+  <div><button class="btn soft block" data-a="sim">Simular um dia com o Israel</button><p class="hint">Veja a tela mudando hora a hora. Nada fica salvo.</p></div>
   <p class="hint">Seus dados ficam só neste aparelho e funcionam sem internet.</p>
   ${confirmReset?`<div class="ask"><p>Isso apaga tarefas, despensa e lugares que você mudou e volta pros dados iniciais.</p><div class="row"><button class="btn coral" data-a="reset2">Apagar e recomeçar</button><button class="btn soft" data-a="settings">Cancelar</button></div></div>`:`<button class="btn soft" data-a="reset1">Restaurar dados iniciais</button>`}`);
 }
@@ -666,17 +748,25 @@ document.addEventListener('click',e=>{
   const act=a.dataset.a, v=a.dataset.v, dk=key(sel);
   switch(act){
     case 'tab':tab=v;S.set('tab',tab);if(v==='hoje')sel=today();render();window.scrollTo(0,0);break;
-    case 'day':sel=v==='0'?today():add(sel,+v);whyOpen=false;render();break;
+    case 'day':sel=v==='0'?today():add(sel,+v);whyOpen=false;wheelId=null;render();break;
     case 'goto':sel=parse(v);tab='hoje';S.set('tab',tab);render();window.scrollTo(0,0);break;
     case 'swap':shifts[dk]=shifts[dk]||{};shifts[dk][v]=(shifts[dk][v]||0)+1;save();render();break;
     case 'feito':{
       const s=findStep(v);if(!s)break;
       whyOpen=false;
       if(s.taskId){const t=tasks.find(x=>x.id===s.taskId);if(t)t.done=true;if(openTasks().length){save();render();break}}
-      doneMap[dk]=doneMap[dk]||{};doneMap[dk][s.sk]=nowMin()+1;save();render();break}
+      doneMap[dk]=doneMap[dk]||{};doneMap[dk][s.sk]=nowMin()+1;wheelId=null;save();render();break}
     case 'undo':if(doneMap[dk]){delete doneMap[dk][v];delete doneMap[dk][v+'-late']}save();render();break;
-    case 'later':later[dk]=(later[dk]||[]).filter(x=>x!==v).concat(v);whyOpen=false;save();render();break;
-    case 'why':whyOpen=!whyOpen;render();break;
+    case 'later':{
+      const rest=dayState(sel).list.filter(x=>!x.done&&!x.skipped), i=rest.findIndex(x=>x.id===v);
+      if(i<0||!rest[i+1])break;
+      const L=Array.isArray(later[dk])?{}:(later[dk]||{});L[v]=rest[i+1].id;later[dk]=L;
+      whyOpen=false;wheelId=null;save();render();break}
+    case 'why':whyOpen=!whyOpen;if($('#wact'))renderActions();else render();break;
+    case 'gonow':wheelId=null;whyOpen=false;renderActions();centerOn($('.wi[data-cur]'),true);break;
+    case 'sim':startSim();break;
+    case 'simexit':exitSim();break;
+    case 'simstep':SIM.m=Math.min(1350,Math.max(360,SIM.m+(+v)));wheelId=null;whyOpen=false;render();break;
     case 'all':showAll=!showAll;render();break;
     case 'bora':{const s=findStep(v);if(s)startTimer(s.head,s.detail);break}
     case 'rdel':reminders=reminders.filter(x=>x.id!==v);save();render();break;
@@ -706,7 +796,12 @@ document.addEventListener('click',e=>{
     case 'reset2':pantry=freshPantry();places=PLACES0.slice();tasks=freshTasks();shifts={};doneMap={};save();closeSheet();render();break;
   }
 });
+document.addEventListener('input',e=>{
+  if(e.target.id==='simT'){const m=+e.target.value;$('#simLbl').textContent=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+});
 document.addEventListener('change',e=>{
+  if(e.target.id==='simT'){SIM.m=+e.target.value;wheelId=null;whyOpen=false;render();return}
+  if(e.target.id==='simDay'){SIM.date=e.target.value;sel=today();doneMap={};later={};shifts={};wheelId=null;render();return}
   if(e.target.id==='refIn'&&e.target.value){const d=parse(e.target.value);if(d.getDay()!==5){d.setDate(d.getDate()+((5-d.getDay()+7)%7))}ref=key(d);S.set('refOk',true);save();e.target.value=ref;render()}
 });
 document.addEventListener('submit',e=>{
@@ -720,6 +815,6 @@ document.addEventListener('submit',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden){closeSheet();render()}});
 setInterval(()=>{if(tab==='hoje'&&$('#sheet').hidden&&!document.activeElement.matches('input,textarea,select'))render()},20000);
 
-render();
+if(location.hash==='#simular')startSim();else render();
 })();
 </script>
