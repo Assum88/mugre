@@ -331,48 +331,48 @@ const HABITS=[
 const CAFE_ISR={id:'cafe',ctx:'Café da manhã do Israel',pool:'cafe',until:'09:00',isr:1,why:'Depois das 9 embola com o almoço das 11 e tira a fome dele.',
   late:{at:'08:40',ctx:'Café leve pra enganar a fome',pool:'leve',until:'10:00',why:'Ficou tarde pro café completo. Algo leve segura até o almoço das 11.'}};
 const CAFE_SOLO={id:'cafe',ctx:'Seu café da manhã',pool:'cafe',until:'09:00',skipAfter:1,why:'Comer cedo ajuda a não travar o resto do dia.'};
-const LANCHEIRA={id:'lancheira',ctx:'Lancheira da escola',head:'Montar a lancheira',merenda:1,until:'13:00',isr:1,why:'Depois do banho, enquanto ele vê desenho. Às 13:00 tem que estar pronta. Se der tempo antes, pode adiantar.'};
+const LANCHEIRA={id:'lancheira',ctx:'Lancheira da escola',head:'Monte a lancheira',merenda:1,until:'13:00',isr:1,why:'Depois do banho, enquanto ele vê desenho. Às 13:00 tem que estar pronta. Se der tempo antes, pode adiantar.'};
 const BRINCAR={id:'brincar',ctx:'Até a hora do almoço',pool:'manha',until:'10:45',isr:1,skipAfter:1,why:'Às 11 vocês saem pra almoçar. Até lá, uma atividade perto de casa.'};
 const ALMOCO_ISR={id:'almoco',ctx:'Almoço com Israel · sair às 11h',pool:'almocoIsr',from:'10:45',until:'12:00',isr:1,why:'Às 11 os lugares estão vazios e a comida está mais fresca.',
   late:{at:'12:00',ctx:'Almoço perto da escola',pool:'almocoEscola',until:'13:15',why:'Ficou tarde. Almoça do lado da escola e de lá já entra. Se der, o banho vem antes de sair.'}};
-const BANHO={id:'banho',ctx:'Antes da escola',head:'Banho e roupa da escola',until:'12:45',isr:1,skipIfLateLunch:1,why:'Às 13:00 tem que estar tudo pronto. A escola entra 13:30.'};
-const ESCOLA={id:'escola',ctx:'Horário fixo',head:'Levar o Israel pra escola',until:'13:30',fixed:'13:30 escola',isr:1,why:'A entrada é às 13:30.'};
-const BUSCAR={id:'buscar',ctx:'Horário fixo',head:'Buscar o Israel na escola',from:'17:30',until:'18:00',fixed:'18:00 saída da escola',isr:1,why:'A escola libera às 18:00.'};
-const REVISAO={id:'revisao',ctx:'Antes de dormir',head:'Revisão do dia',detail:'Marque o que fez e dê uma olhada no amanhã.',until:'22:00',why:'Dois minutos olhando o amanhã tiram o peso da manhã seguinte.'};
+const BANHO={id:'banho',ctx:'Antes da escola',head:'Dê banho e vista a roupa da escola',until:'12:45',isr:1,skipIfLateLunch:1,why:'Às 13:00 tem que estar tudo pronto. A escola entra 13:30.'};
+const ESCOLA={id:'escola',ctx:'Horário fixo',head:'Leve o Israel pra escola',until:'13:30',fixed:'13:30 escola',isr:1,why:'A entrada é às 13:30.'};
+const BUSCAR={id:'buscar',ctx:'Horário fixo',head:'Busque o Israel na escola',from:'17:30',until:'18:00',fixed:'18:00 saída da escola',isr:1,why:'A escola libera às 18:00.'};
+const REVISAO={id:'revisao',ctx:'Antes de dormir',head:'Faça a revisão do dia',detail:'Marque o que fez e dê uma olhada no amanhã.',until:'22:00',why:'Dois minutos olhando o amanhã tiram o peso da manhã seguinte.'};
 const TAREFA=(id,until,from)=>({id,ctx:'Sua tarefa',tarefa:1,from,until,why:'Uma tarefa de cada vez. Quando terminar, toque em Feito e aparece a próxima.'});
 const ALMOCO_SOLO=until=>({id:'almoco',ctx:'Seu almoço',pool:'almocoSolo',until,why:'Você gosta de almoçar cedo: lugar vazio e comida fresca.'});
 const JANTAR=(isr,until)=>({id:'jantar',ctx:isr?'Jantar com Israel':'Seu jantar',pool:'jantar',until,isr:isr?1:0,why:'Jantar cedo deixa a noite mais leve.'});
 const LANCHE=(until,ctx)=>({id:'lanche',ctx:ctx||'Lanche na volta',pool:'lanche',until,isr:1,why:'Algo quentinho na volta segura até a hora de dormir.'});
-const DORMIR=until=>({id:'dormir',ctx:'Fim do dia do Israel',head:'Rotina de dormir',until,isr:1,why:'Dormir no horário deixa a manhã seguinte tranquila.'});
-const LIVRE=(id,until,from)=>({id,ctx:'Seu tempo',head:'Tempo livre',detail:'Descansar de verdade também é plano.',from,until,skipAfter:1,why:'Nada marcado agora. Pode descansar sem culpa.'});
+const DORMIR=until=>({id:'dormir',ctx:'Fim do dia do Israel',head:'Coloque o Israel pra dormir',until,isr:1,why:'Dormir no horário deixa a manhã seguinte tranquila.'});
+const LIVRE=(id,until,from)=>({id,ctx:'Seu tempo',head:'Descanse de verdade',detail:'Nada marcado agora.',from,until,skipAfter:1,why:'Nada marcado agora. Pode descansar sem culpa.'});
 const PASSEIO_MANHA={id:'manha',ctx:'Passeio da manhã',pool:'manha',until:'10:45',isr:1,skipAfter:1,why:'De manhã está mais fresco e vazio. Às 11 é hora de almoçar.'};
-const SONECA={id:'soneca',ctx:'Depois do almoço',head:'Descanso e soneca',from:'12:30',until:'15:00',isr:1,skipAfter:1,why:'Uma pausa depois do almoço segura o humor da tarde.'};
+const SONECA={id:'soneca',ctx:'Depois do almoço',head:'Descanse junto: hora da soneca',from:'12:30',until:'15:00',isr:1,skipAfter:1,why:'Uma pausa depois do almoço segura o humor da tarde.'};
 
 function routine(d){
   const wd=d.getDay(), c=custody(d);
   const morningIsr=[CAFE_ISR,LANCHEIRA,BRINCAR,ALMOCO_ISR,BANHO,ESCOLA];
   const segundaNoite=[
-    {id:'brinquedao',ctx:'Seu costume das segundas',head:'Brinquedão do Pátio Costa Azul',detail:'Uns 40 minutos pra ele gastar energia.',until:'19:00',isr:1,skipAfter:1,why:'Na segunda, depois da escola, você costuma levar o Israel no brinquedão por uns 40 minutos.'},
+    {id:'brinquedao',ctx:'Seu costume das segundas',head:'Leve o Israel pro Brinquedão do Pátio Costa Azul',detail:'Uns 40 minutos pra ele gastar energia.',until:'19:00',isr:1,skipAfter:1,why:'Na segunda, depois da escola, você costuma levar o Israel no brinquedão por uns 40 minutos.'},
     LANCHE('19:45'),
-    {id:'banho2',ctx:'Noite',head:'Banho do Israel',until:'20:15',isr:1,why:'Banho antes de dormir acalma.'},
+    {id:'banho2',ctx:'Noite',head:'Dê banho no Israel',until:'20:15',isr:1,why:'Banho antes de dormir acalma.'},
     DORMIR('21:00'),REVISAO];
   const tercaNoite=[
-    {id:'acai',ctx:'Seu costume das terças',head:'Sopa na loja de açaí',detail:'Uns 40 minutos, depois direto pra célula.',until:'19:15',isr:1,why:'Na terça, depois da escola, vocês costumam tomar sopa na loja de açaí antes da célula.'},
-    {id:'celula',ctx:'Horário fixo',head:'Célula',until:'19:30',end:'21:00',fixed:'19:30 célula',isr:1,why:'Toda terça, às 19:30.'},
+    {id:'acai',ctx:'Seu costume das terças',head:'Tome sopa com ele na loja de açaí',detail:'Uns 40 minutos, depois direto pra célula.',until:'19:15',isr:1,why:'Na terça, depois da escola, vocês costumam tomar sopa na loja de açaí antes da célula.'},
+    {id:'celula',ctx:'Horário fixo',head:'Vá pra célula',until:'19:30',end:'21:00',fixed:'19:30 célula',isr:1,why:'Toda terça, às 19:30.'},
     DORMIR('21:30'),REVISAO];
   switch(wd){
     case 1: return (c.am?[...morningIsr,TAREFA('t2','17:30','13:30')]:[CAFE_SOLO,TAREFA('t1','12:00'),ALMOCO_SOLO('13:30'),TAREFA('t2','17:30','13:30')]).concat([BUSCAR],segundaNoite);
     case 2: return [...morningIsr,TAREFA('t2','17:30','13:30'),BUSCAR,...tercaNoite];
     case 3: return [...morningIsr,TAREFA('t2','18:00','13:30'),JANTAR(false,'20:00'),LIVRE('livre','21:30'),REVISAO];
     case 4: return [CAFE_SOLO,TAREFA('t1','12:00'),ALMOCO_SOLO('13:30'),TAREFA('t2','17:00','13:30'),
-      {id:'mercado',ctx:'Pendências',head:'Mercado e recados',pend:1,until:'18:30',skipAfter:1,why:'Fim de tarde é bom pra resolver a rua: mercado, recados, contas.'},
+      {id:'mercado',ctx:'Pendências',head:'Resolva mercado e recados',pend:1,until:'18:30',skipAfter:1,why:'Fim de tarde é bom pra resolver a rua: mercado, recados, contas.'},
       JANTAR(false,'20:00'),REVISAO];
     case 5: {
       const a=[CAFE_SOLO,
-        {id:'pauta',ctx:'Antes da gravação',head:'Preparar o podcast',detail:'Pauta, roupa e equipamento.',until:'09:30',why:'Sair preparado tira a correria da gravação.'},
-        {id:'podcast',ctx:'Horário fixo',head:'Filmagem do Podcast',detail:'Até as 16:00. Almoço no intervalo.',until:'10:00',end:'16:00',fixed:'10:00 podcast',why:'Toda sexta, das 10:00 às 16:00.'},
-        {id:'descanso',ctx:'Depois da gravação',head:'Descansar',detail:'Dia puxado. Recarrega.',from:'16:00',until:'17:30',skipAfter:1,why:'Gravar cansa. Recarregar agora rende a noite.'}];
-      if(c.pm)a.push({id:'pegar',ctx:'Horário fixo',head:'Pegar o Israel',from:'17:30',until:'18:00',fixed:'18:00 pegar o Israel',isr:1,why:'Começa o fim de semana com ele às 18:00.'},LANCHE('19:00','Lanche de chegada'),JANTAR(true,'20:00'),DORMIR('21:00'),REVISAO);
+        {id:'pauta',ctx:'Antes da gravação',head:'Prepare o podcast',detail:'Pauta, roupa e equipamento.',until:'09:30',why:'Sair preparado tira a correria da gravação.'},
+        {id:'podcast',ctx:'Horário fixo',head:'Grave o podcast',detail:'Até as 16:00. Almoço no intervalo.',until:'10:00',end:'16:00',fixed:'10:00 podcast',why:'Toda sexta, das 10:00 às 16:00.'},
+        {id:'descanso',ctx:'Depois da gravação',head:'Descanse',detail:'Dia puxado. Recarregue.',from:'16:00',until:'17:30',skipAfter:1,why:'Gravar cansa. Recarregar agora rende a noite.'}];
+      if(c.pm)a.push({id:'pegar',ctx:'Horário fixo',head:'Pegue o Israel',from:'17:30',until:'18:00',fixed:'18:00 pegar o Israel',isr:1,why:'Começa o fim de semana com ele às 18:00.'},LANCHE('19:00','Lanche de chegada'),JANTAR(true,'20:00'),DORMIR('21:00'),REVISAO);
       else a.push(JANTAR(false,'20:00'),LIVRE('livre','21:30'),REVISAO);
       return a;
     }
@@ -381,17 +381,17 @@ function routine(d){
         ?[CAFE_ISR,PASSEIO_MANHA,Object.assign({},ALMOCO_ISR,{late:null,until:'12:30'}),SONECA,
           {id:'tarde',ctx:'Passeio da tarde',pool:'tarde',from:'15:00',until:'17:30',isr:1,skipAfter:1,why:'O sol baixou. Bom horário pra sair de novo.'},
           LANCHE('18:30','Banho e lanche'),JANTAR(true,'19:30'),DORMIR('21:00'),REVISAO]
-        :[CAFE_SOLO,{id:'casa',ctx:'Sábado sem Israel',head:'Casa e mercado',pend:1,until:'11:00',why:'Resolver a casa cedo libera o resto do dia.'},ALMOCO_SOLO('13:00'),LIVRE('livre','19:00'),JANTAR(false,'20:00'),REVISAO];
+        :[CAFE_SOLO,{id:'casa',ctx:'Sábado sem Israel',head:'Arrume a casa e vá ao mercado',pend:1,until:'11:00',why:'Resolver a casa cedo libera o resto do dia.'},ALMOCO_SOLO('13:00'),LIVRE('livre','19:00'),JANTAR(false,'20:00'),REVISAO];
     default: {
-      const igreja={id:'igreja',ctx:'Horário fixo',head:'Igreja',until:'17:00',end:'18:30',fixed:'17:00 igreja',why:'Todo domingo, às 17:00.'};
+      const igreja={id:'igreja',ctx:'Horário fixo',head:'Vá pra igreja',until:'17:00',end:'18:30',fixed:'17:00 igreja',why:'Todo domingo, às 17:00.'};
       return c.am
         ?[Object.assign({},CAFE_ISR,{pool:'cafeDomingo'}),PASSEIO_MANHA,Object.assign({},ALMOCO_ISR,{late:null,until:'12:30'}),SONECA,
-          {id:'arrumar',ctx:'Antes da igreja',head:'Banho e arrumar pra igreja',from:'15:30',until:'16:30',isr:1,why:'Saindo 16:30 vocês chegam com folga às 17:00.'},
+          {id:'arrumar',ctx:'Antes da igreja',head:'Dê banho e arrume o Israel pra igreja',from:'15:30',until:'16:30',isr:1,why:'Saindo 16:30 vocês chegam com folga às 17:00.'},
           Object.assign({},igreja,{isr:1}),JANTAR(true,'20:00'),
-          {id:'mochila',ctx:'Pra amanhã',head:'Separar a mochila da escola',detail:'Segunda ele entra às 13:30.',until:'20:30',isr:1,why:'Deixar pronto hoje alivia a manhã de segunda.'},
+          {id:'mochila',ctx:'Pra amanhã',head:'Separe a mochila da escola',detail:'Segunda ele entra às 13:30.',until:'20:30',isr:1,why:'Deixar pronto hoje alivia a manhã de segunda.'},
           DORMIR('21:00'),REVISAO]
         :[CAFE_SOLO,LIVRE('livre1','12:00'),ALMOCO_SOLO('13:00'),
-          {id:'semana',ctx:'Domingo',head:'Planejar a semana',detail:'Veja a aba Semana e as tarefas com prazo.',until:'15:00',why:'Quinze minutos de plano poupam a cabeça a semana inteira.'},
+          {id:'semana',ctx:'Domingo',head:'Planeje a semana',detail:'Veja a aba Semana e as tarefas com prazo.',until:'15:00',why:'Quinze minutos de plano poupam a cabeça a semana inteira.'},
           igreja,JANTAR(false,'20:00'),REVISAO];
     }
   }
@@ -406,8 +406,8 @@ const toFront=(l,test)=>{const i=l.findIndex(test);if(i>0)l.unshift(l.splice(i,1
 
 function poolList(name,d,isr){
   const wd=d.getDay(), seed=hash(key(d)+name);
-  const home=arr=>arr.filter(x=>x[1].every(has)).map(x=>({n:x[0],sub:'Em casa'}));
-  const recipes=meal=>RECIPES.filter(r=>r.meals.includes(meal)&&r.needs.every(has)).map(r=>({n:r.n,sub:'Em casa'}));
+  const home=arr=>arr.filter(x=>x[1].every(has)).map(x=>({n:x[0],sub:'Em casa',home:1}));
+  const recipes=meal=>RECIPES.filter(r=>r.meals.includes(meal)&&r.needs.every(has)).map(r=>({n:r.n,sub:'Em casa',home:1}));
   const eatOut=meal=>places.filter(p=>p.type==='comida'&&(p.meals||['almoco','jantar']).includes(meal)&&(!p.days||p.days.includes(wd))&&(!p.israel||isr)).map(p=>({n:p.n,sub:p.note||'Comer fora'}));
   const passeios=manha=>places.filter(p=>p.type==='passeio'&&(!p.days||p.days.includes(wd))&&(!p.manha||manha)).map(p=>({n:p.n,sub:p.note||''}));
   switch(name){
@@ -444,6 +444,22 @@ function dueTag(due){
   return`<span class="tag fixo">prazo ${ddmm(parse(due))}</span>`;
 }
 
+// Frase de ordem a partir da sugestão: "Faça...", "Leve o Israel pra...", "Almoce no..."
+const MASC=/^(Shopping|Brinquedão|Clube|Restaurante|PF|Moon|Parque|Mercado|Açougue|Bar|Sítio)/i;
+const FEM=/^(Pracinha|Praça|Praia|Feira|Padaria|Comida|Gastronomia|Loja|Fazenda|Lanchonete|Pizzaria|Sorveteria|Hamburgueria|Churrascaria)/i;
+const art=(n,m,f,x)=>MASC.test(n)?m:FEM.test(n)?f:x;
+const lf=t=>/^(Yakult|Danoninho)/.test(t)?t:t.charAt(0).toLowerCase()+t.slice(1);
+function imperative(o,pool){
+  const n=o.n;
+  if(pool==='manha'||pool==='tarde')return`Leve o Israel ${art(n,'pro','pra','até')} ${n}`;
+  if(o.home){
+    if(pool==='leve'||(pool==='lanche'&&!/^Mingau/.test(n)))return`Dê ${lf(n)} pra ele`;
+    return`Faça ${lf(n)}`;
+  }
+  const p=n.replace(/^(Almoço|Café da manhã) (na|no) /,'');
+  const verb=/^cafe/.test(pool)?'Tome café':pool==='jantar'?'Jante':'Almoce';
+  return`${verb} ${art(p,'no','na','em')} ${p}`;
+}
 function resolve(st,d,nm,live,ti){
   const dk=key(d), dm=doneMap[dk]||{};
   const doneLate=!!dm[st.id+'-late'];
@@ -454,14 +470,14 @@ function resolve(st,d,nm,live,ti){
   if(s.pool){
     const o=rotate(poolList(s.pool,d,!!s.isr),shiftOf(dk,s.sk));
     s.swap=o.length>1;
-    if(o.length){s.head=o[0].n;s.detail=[o[0].sub,o[1]?'ou '+o[1].n:''].filter(Boolean).join(' · ')}
+    if(o.length){s.head=imperative(o[0],s.pool);s.detail=[o[0].sub,o[1]?'ou '+lf(o[1].n):''].filter(Boolean).join(' · ')}
     else{s.head=s.head||s.ctx;s.detail='Nada em casa pra isso. Veja a lista de compras.'}
   }
   if(s.merenda){const m=merenda(s.sk,d);s.detail=[m.suco,m.doce,m.sal].filter(Boolean).join(' + ')+(m.sucoFalta?' (suco de uva acabou)':'');s.swap=true}
   if(s.tarefa){
     const ts=openTasks();
     if(ts.length){const t=ts[(((ti||0)+shiftOf(dk,s.sk))%ts.length+ts.length)%ts.length];s.head=t.t;s.detail=dueText(t.due);s.taskId=t.id;s.swap=ts.length>1}
-    else{s.head='Tempo livre';s.detail='Cadastre tarefas na aba Tarefas que eu encaixo aqui.'}
+    else{s.head='Aproveite o tempo livre';s.detail='Cadastre tarefas na aba Tarefas que eu encaixo aqui.'}
   }
   if(s.pend){const out=pantry.filter(p=>!p.have);s.detail=out.length?'Comprar: '+out.slice(0,4).map(p=>p.n).join(', ')+(out.length>4?' e mais '+(out.length-4):''):'Lista de compras vazia. Só os recados.'}
   return s;
