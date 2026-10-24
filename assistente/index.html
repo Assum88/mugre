@@ -95,14 +95,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .fixedline{font-size:14px;color:var(--muted);margin:22px 0 4px}
 .plan-h{font:800 30px/1.05 var(--display);letter-spacing:-.02em;margin:0 0 14px}
 .tm small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.wheel-box{position:relative;--wh:clamp(380px,56vh,470px);--it:196px;margin-top:2px}
+.wheel-box{position:relative;--wh:clamp(400px,58vh,490px);--it:216px;margin-top:2px}
 .wheel-box::before{content:"";position:absolute;left:0;right:0;top:calc(50% - var(--it)/2);height:var(--it);background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 12px 30px var(--shadow-soft);pointer-events:none}
 .wheel{position:relative;height:var(--wh);overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;padding-block:calc((var(--wh) - var(--it))/2);padding-inline:14px 18px;-webkit-mask-image:linear-gradient(rgba(0,0,0,.35),#000 26%,#000 74%,rgba(0,0,0,.35));mask-image:linear-gradient(rgba(0,0,0,.35),#000 26%,#000 74%,rgba(0,0,0,.35));outline-offset:4px}
 .wheel::-webkit-scrollbar{display:none}
 .wi{height:var(--it);scroll-snap-align:center;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;gap:8px;transform-origin:center;will-change:transform,opacity;overflow:hidden}
 .wrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
 .wtx{display:grid;gap:3px;min-width:0}
-.wi .wh{font:800 clamp(25px,7.2vw,36px)/1.04 var(--display);letter-spacing:-.025em;margin:0;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wi .wh{font:800 clamp(21px,5.9vw,32px)/1.05 var(--display);letter-spacing:-.025em;margin:0;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .wi .ctx{font-size:15px;color:var(--muted);margin:0;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .wi.is-past .wh{color:var(--muted)}
 .wi .clock{margin-top:0}
@@ -133,10 +133,28 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .thl .cam{position:absolute;right:-5px;bottom:-5px;width:24px;height:24px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;color:var(--muted)}
 .thl:focus-within{outline:3px solid var(--sea);outline-offset:2px;border-radius:14px}
 .vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
-.tright{display:flex;gap:6px;align-items:center}
+.tright{display:flex;gap:6px;align-items:center;flex:none}
+.pillbtn span{white-space:nowrap}
 .pillbtn{display:inline-flex;align-items:center;gap:5px;height:40px;padding-inline:10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
 .pillbtn svg{color:var(--sea)} .pillbtn.xp svg{color:var(--sun)}
-.rail{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:19;writing-mode:vertical-rl;background:var(--surface);border:1px solid var(--line);border-right:0;border-radius:12px 0 0 12px;padding:14px 5px;padding-right:calc(5px + env(safe-area-inset-right,0px));font-size:12px;font-weight:700;color:var(--muted);opacity:.75;letter-spacing:.04em}
+.qstrip{position:fixed;right:0;top:132px;bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:19;width:calc(64px + env(safe-area-inset-right,0px));padding:8px 4px;padding-right:calc(4px + env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:6px;overflow-y:auto;scrollbar-width:none;background:var(--surface);border:1px solid var(--line);border-right:0;border-radius:16px 0 0 16px;opacity:.62;transition:opacity .2s}
+.qstrip::-webkit-scrollbar{display:none}
+.qstrip:hover,.qstrip:focus-within{opacity:1}
+.qs-h{background:none;border:0;padding:2px 0 4px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1.15}
+.qs-h b{display:block;font:800 16px/1 var(--display);color:var(--sun-ink);margin-top:2px}
+.qs{background:none;border:0;padding:4px 2px;display:grid;justify-items:center;gap:3px;border-radius:12px}
+.qs img{width:36px;height:36px}
+.qs span{font-size:9.5px;line-height:1.15;color:var(--ink);text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.qs.more{font:800 20px/1 var(--display);color:var(--muted);padding-block:6px}
+body.rail-on #view{margin-right:58px}
+body.rail-on .fab{right:calc(max(16px,env(safe-area-inset-right,0px)) + 0px)}
+.qhero{display:grid;justify-items:center;gap:8px;text-align:center}
+.qhero img{width:112px;height:112px}
+.th img.il{width:80%;height:80%;object-fit:contain}
+.pname{background:none;border:0;padding:0;text-align:left;font-size:16px;display:inline-flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.pname .note{font-size:13px;color:var(--sea);font-weight:700}
+.endday{display:grid;gap:4px;margin-block:8px 4px}
+.endday p{margin:0;font:800 22px/1.15 var(--display);letter-spacing:-.01em}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(140px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 8px 22px var(--shadow)}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .stats div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:2px}
@@ -277,7 +295,7 @@ label.lbl{font-size:13px;font-weight:700;color:var(--muted);display:block;margin
 </div>
 
 <button class="fab" data-a="travei">Travei</button>
-<button class="rail" data-a="quests" id="rail"></button>
+<aside class="qstrip" id="qstrip" aria-label="Side quests"></aside>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <nav class="nav" aria-label="Seções">
@@ -672,16 +690,17 @@ function segBar(s,nm){
   for(let i=0;i<shown;i++)t+=`<i class="${notYet?'hollow':''}"><b style="width:${Math.round((i===n-1?frac:1)*100)}%"></b></i>`;
   return`<div class="segs${!notYet&&rem<10?' warn':''}" role="img" aria-label="${notYet?'Dura':'Faltam'} ${fmtDur(rem)}">${t}${n>shown?`<span class="more">+${n-shown}</span>`:''}</div><div class="seglegend">cada traço = ${unit===60?'1 hora':'30 min'}</div>`;
 }
-function wheelItem(s,isCur,nm){
+function wheelItem(s,isCur,nm,center){
   let meta;
   if(isCur){const k=clock(s,nm);meta=`<div class="clock${k.warn?' warn':''}"><span class="n">${esc(k.n)}</span><span class="until">${esc(k.l)}</span></div>${segBar(s,nm)}`}
   else if(s.done)meta='<div class="clock"><span class="until">Feito ✓</span></div>';
   else if(s.skipped)meta='<div class="clock"><span class="until">Passou</span></div>';
   else meta=`<div class="clock"><span class="until">${s.fixed?s.until+' · horário fixo':'até '+s.until}</span></div>`;
-  return`<div class="wi${isCur?' is-cur':''}${s.done||s.skipped?' is-past':''}" data-id="${s.id}"${isCur?' data-cur="1"':''}><div class="wrow">${thumb(s.photoKey,{icon:s.icon,tone:s.tone,text:s.text,size:isCur?72:60,edit:isCur})}<div class="wtx"><div class="eyebrow">${isCur?'Agora · ':''}${esc(s.ctx)}</div><h2 class="wh">${esc(s.head)}</h2>${s.detail?`<p class="ctx">${esc(s.detail)}</p>`:''}</div></div>${meta}</div>`;
+  return`<div class="wi${isCur?' is-cur':''}${s.done||s.skipped?' is-past':''}" data-id="${s.id}"${isCur||center?' data-cur="1"':''}><div class="wrow">${thumb(s.photoKey,{illu:s.illu,icon:s.icon,tone:s.tone,text:s.text,size:isCur?76:62,edit:isCur})}<div class="wtx"><div class="eyebrow">${isCur?'Agora · ':''}${esc(s.ctx)}</div><h2 class="wh">${esc(s.head)}</h2>${s.detail?`<p class="ctx">${esc(s.detail)}</p>`:''}</div></div>${meta}</div>`;
 }
 function renderActions(){
   const box=$('#wact');if(!box||!lastState)return;
+  if(previewMode){box.innerHTML='';const pos=$('#wpos'),c=centered(),l=lastState.list;if(pos&&c)pos.textContent=`${l.findIndex(x=>x.id===c.dataset.id)+1} de ${l.length}`;return}
   const list=lastState.list, s=list.find(x=>x.id===wheelId)||list.find(x=>x.id===curId);if(!s)return;
   const rest=list.filter(x=>!x.done&&!x.skipped), isCur=s.id===curId, dm=doneMap[lastState.dk]||{};
   const canLater=isCur&&!s.fixed&&rest[1]&&!rest[1].fixed;
@@ -730,9 +749,9 @@ function simBar(){
   <div class="row"><button class="btn soft sm" data-a="simstep" data-v="-30">−30 min</button><button class="btn soft sm" data-a="simstep" data-v="30">+30 min</button><select class="field sm" id="simDay" aria-label="Dia simulado">${nextDays().map(o=>`<option value="${o.k}"${o.k===SIM.date?' selected':''}>${esc(o.l)}</option>`).join('')}</select></div>
   <p class="hint" style="margin:0">Nada do que você marcar aqui fica salvo.</p></div>`;
 }
-function startSim(){
+function startSim(dk){
   const t=realToday();let d=add(t,1);while(!(d.getDay()===2))d=add(d,1);
-  SIM={on:true,date:key(d),m:450};
+  SIM={on:true,date:dk||key(d),m:450};
   doneMap={};later={};shifts={};tasks=JSON.parse(JSON.stringify(tasks));quests=JSON.parse(JSON.stringify(quests));
   sel=today();tab='hoje';wheelId=null;whyOpen=false;closeSheet();render();window.scrollTo(0,0);
 }
@@ -756,11 +775,15 @@ function viewHoje(){
     return h;
   }
   const rest=list.filter(s=>!s.done&&!s.skipped), cur=rest[0];
-  lastState=st; curId=cur?cur.id:null;
+  lastState=st; curId=cur?cur.id:null; previewMode=false;
   if(cur){
     h+=`<div class="wheel-box"><button class="wnav up" data-a="wstep" data-v="-1" aria-label="Passo anterior">${ic('up',18)}</button><div class="wheel" id="wheel" tabindex="0" aria-label="Passos do dia. Deslize pra espiar os outros.">${list.map(s=>wheelItem(s,s===cur,nm)).join('')}</div><span class="wpos" id="wpos"></span><button class="wnav down" data-a="wstep" data-v="1" aria-label="Próximo passo">${ic('down',18)}</button></div><div id="wact"></div>`;
   }else{
-    h+=`<section class="focus"><div class="eyebrow">Dia encerrado</div><h1>Bom descanso.</h1><p class="ctx">Amanhã já está planejado.</p><div class="row"><button class="btn primary" data-a="day" data-v="1">Ver amanhã</button></div></section>`;
+    const tm=add(d,1), ts=dayState(tm);
+    lastState=ts; curId=ts.list[0]?ts.list[0].id:null; previewMode=true;
+    h+=`<div class="endday"><div class="eyebrow">Por hoje é isso. Bom descanso.</div><p>Amanhã, ${WD[tm.getDay()].toLowerCase()}, começa assim:</p></div>`;
+    h+=`<div class="wheel-box"><button class="wnav up" data-a="wstep" data-v="-1" aria-label="Passo anterior">${ic('up',18)}</button><div class="wheel" id="wheel" tabindex="0" aria-label="Passos de amanhã">${ts.list.map((s,i)=>wheelItem(s,false,0,i===0)).join('')}</div><span class="wpos" id="wpos"></span><button class="wnav down" data-a="wstep" data-v="1" aria-label="Próximo passo">${ic('down',18)}</button></div><div id="wact"></div>`;
+    h+=`<div class="row" style="margin-top:12px"><button class="btn primary" data-a="simtoday">Ver como fica durante o dia</button><button class="btn soft" data-a="day" data-v="1">Plano de amanhã</button></div>`;
   }
   const fx=list.filter(s=>s.fixed&&!s.done&&!s.skipped).map(s=>s.fixed);
   if(fx.length)h+=`<p class="fixedline">Fixo hoje: ${fx.map(esc).join(' · ')}</p>`;
@@ -796,7 +819,7 @@ const QUESTS0=['Arrume o armário','Varra a casa','Limpe a geladeira','Troque a 
 let events=S.get('events',null)||EVENTS0.slice();
 let quests=S.get('quests',null)||QUESTS0.slice();
 let xp=S.get('xp',0), xpDay=S.get('xpDay',{}), water=S.get('water',{});
-let calMonth=null, nudged=false;
+let calMonth=null, nudged=false, previewMode=false, city=S.get('city','Rio das Ostras, RJ');
 
 function eventsOn(d){const k=key(d),dom=d.getDate();return events.filter(e=>e.d===k||(e.rep==='mensal'&&e.d<=k&&parse(e.d).getDate()===dom))}
 const isHoliday=d=>eventsOn(d).some(e=>e.c==='feriado');
@@ -852,11 +875,27 @@ const TONES=['sea','sun','coral','purple'];
 const toneOf=t=>TONES[hash(String(t))%TONES.length];
 function thumb(k,o){
   o=o||{};const ph=photo(k), sz=o.size||56;
-  const inner=ph?`<img src="${ph}" alt="">`:o.text?`<b>${esc(o.text)}</b>`:ic(o.icon||'star',Math.round(sz*.46));
+  const inner=ph?`<img src="${ph}" alt="">`:o.illu?`<img class="il" src="img/${o.illu}.png" alt="">`:o.text?`<b>${esc(o.text)}</b>`:ic(o.icon||'star',Math.round(sz*.46));
   const tile=`<span class="th t-${o.tone||'sea'}" style="--s:${sz}px">${inner}</span>`;
   if(!o.edit)return tile;
   return`<label class="thl" aria-label="${ph?'Trocar a foto':'Pôr uma foto'}">${tile}<input class="vh" type="file" accept="image/*" data-photo="${esc(k)}"><span class="cam">${ic('cam',14)}</span></label>`;
 }
+// Ilustrações (Fluent Emoji 3D, Microsoft, licença MIT) guardadas em img/
+const ILLU={
+  'Suco de uva':'beverage-box','Leite':'glass-of-milk','Iogurte':'bowl-with-spoon','Danoninho':'strawberry','Yakult':'cup-with-straw','Banana prata':'banana','Uva sem semente':'grapes',
+  'Pão de sal':'baguette-bread','Pão bisnaguinha':'croissant','Pão de forma':'bread','Tapioca':'flatbread','Bolo':'shortcake','Biscoito doce':'cookie','Biscoito salgado':'rice-cracker',
+  'Ovos':'egg','Queijo':'cheese-wedge','Requeijão':'jar','Margarina':'butter','Manteiga':'butter','Arroz':'cooked-rice','Macarrão':'spaghetti','Molho de tomate':'tomato','Creme de leite':'jar','Óleo':'olive','Aveia':'sheaf-of-rice',
+  'Frango':'poultry-leg','Almôndegas':'falafel','Nugget':'poultry-leg','Batata frita congelada':'french-fries',
+  'Ovo mexido e suco de uva':'cooking','Tapioca com queijo':'flatbread','Bisnaguinha com requeijão e suco de uva':'croissant','Pão de sal com manteiga e leite':'baguette-bread','Misto no pão de forma':'sandwich','Bolo com leite':'shortcake','Iogurte com banana':'bowl-with-spoon',
+  'Strogonoff de frango, arroz e batata frita':'curry-rice','Macarrão com almôndegas':'spaghetti','Arroz, frango e batata frita':'poultry-leg','Nuggets com arroz e batata frita':'french-fries','Arroz com ovo':'cooked-rice','Macarrão ao molho com queijo':'spaghetti',
+  'Mingau de aveia':'bowl-with-spoon','Banana e um Danoninho':'banana','Um iogurte':'bowl-with-spoon','Yakult e uva':'grapes','Uma banana':'banana','Duas bisnaguinhas':'croissant','Bisnaguinha com requeijão':'croissant','Sanduíche de pão de forma com queijo':'sandwich','Pão de sal com queijo':'baguette-bread',
+  'Pracinha Azul':'playground-slide','Pracinha da Rotatória':'playground-slide','Pracinha do Mariléia':'playground-slide','Brinquedão':'carousel-horse','Shopping':'shopping-bags','Praia do Remanso':'water-wave','Praia da Joana':'beach-with-umbrella','Praia Costa Azul':'beach-with-umbrella','Clube Day Use':'person-swimming',
+  'Feira de Sábado (Âncora)':'basket','Feira de Domingo (Campomar)':'basket','Padaria Mariléia':'croissant','Almoço na Fazenda':'cow-face','Moon Gastrobar':'crescent-moon','Restaurante do Peixinho':'tropical-fish','PF perto da escola':'fork-and-knife-with-plate',
+  'Padaria Santa Terezinha':'cut-of-meat','Gastronomia':'fork-and-knife-with-plate','PF Hortifruti':'green-salad','Comida Caseira':'pot-of-food','Lancheira':'bento-box'
+};
+const STEP_ILLU={escola:'school',buscar:'school',mochila:'backpack',entrega:'house',pegar:'house',banho:'bathtub',banho2:'bathtub',arrumar:'bathtub',dormir:'bed',revisao:'check-mark-button',semana:'spiral-calendar',igreja:'church',celula:'folded-hands',podcast:'studio-microphone',pauta:'memo',lixo:'wastebasket',mercado:'shopping-cart',casa:'broom',descanso:'couch-and-lamp',livre:'couch-and-lamp',livre1:'couch-and-lamp',soneca:'sleeping-face',brinquedao:'carousel-horse',acai:'pot-of-food'};
+const KW_ILLU=[[/pag|boleto|conta |mei\b|imposto|pix|banco/i,'money-with-wings'],[/edit|vídeo|video|corte/i,'clapper-board'],[/grav|podcast|áudio|audio/i,'studio-microphone'],[/reuni|call|encontro/i,'handshake'],[/e-?mail|mensag|respond|whats/i,'e-mail'],[/mercado|compr/i,'shopping-cart'],[/médic|consulta|dentist|exame/i,'stethoscope'],[/carro|oficina/i,'automobile'],[/estud|\bler\b|livro|curso/i,'books'],[/escrev|texto|roteiro|pauta|document|contrato/i,'memo'],[/foto/i,'framed-picture'],[/varr|faxina|limpe a casa/i,'broom'],[/geladeira|louça|limp/i,'sponge'],[/armário|roupa|guarda/i,'t-shirt'],[/cama/i,'bed'],[/doa|caixa|mudan|entreg/i,'package'],[/água/i,'droplet'],[/câmera|camera/i,'camera'],[/sabão|lav/i,'soap'],[/praia/i,'beach-with-umbrella'],[/pracinha|praça|parque/i,'playground-slide'],[/feira/i,'basket'],[/shopping/i,'shopping-bags'],[/padaria|pão/i,'croissant'],[/suco/i,'beverage-box'],[/fruta/i,'grapes'],[/carne|churras/i,'cut-of-meat'],[/peixe/i,'tropical-fish'],[/sopa/i,'pot-of-food'],[/salada|hortifruti/i,'green-salad'],[/escola/i,'school'],[/igreja/i,'church'],[/restaurante|almoço|jantar|pf\b/i,'fork-and-knife-with-plate']];
+function illuFor(name){if(!name)return null;if(ILLU[name])return ILLU[name];for(const [re,v] of KW_ILLU)if(re.test(name))return v;return null}
 function nameIcon(n){
   return /Praia/i.test(n)?'wave':/Pracinha|Praça|Parque/i.test(n)?'tree':/Feira/i.test(n)?'tent':/Shopping/i.test(n)?'bag':/Brinquedão/i.test(n)?'blocks':/Clube/i.test(n)?'pool':/Padaria|Café/i.test(n)?'cup':'fork';
 }
@@ -866,6 +905,7 @@ function decorate(s){
   else if(s.opt){s.photoKey=s.opt.n;s.icon=s.opt.home?(/^(cafe|cafeDomingo|leve|lanche)$/.test(s.pool)?'cup':'plate'):nameIcon(s.opt.n)}
   else if(s.tarefa){s.icon='case';s.photoKey=s.client?'cliente:'+s.client:'tarefa:'+(s.taskId||'');s.text=s.client?initials(s.client):''}
   else{s.icon=STEP_ICON[s.id]||(String(s.id).startsWith('ev-')?'star':'star');s.photoKey='passo:'+s.id}
+  s.illu=s.merenda?'bento-box':s.opt?(illuFor(s.opt.n)||'fork-and-knife-with-plate'):s.tarefa?(illuFor(s.head)||'briefcase'):STEP_ILLU[s.id]||(String(s.id).startsWith('ev-')?'spiral-calendar':illuFor(s.head)||'star');
   s.tone=s.isr?'sun':s.fixed?'purple':'sea';
   return s;
 }
@@ -876,12 +916,20 @@ function renderHeader(){
   $('#waterBtn').setAttribute('aria-label',`Água: ${w} de 8 copos. Toque quando beber um.`);
   $('#xpBtn').innerHTML=`${ic('bolt',18)}<span>Nv ${level()}</span>`;
   const open=quests.filter(q=>!q.done).length;
-  $('#rail').textContent=`Side quests · ${open}`;
-  $('#rail').hidden=tab!=='hoje';
+  const qs=$('#qstrip'), on=tab==='hoje';
+  qs.hidden=!on;document.body.classList.toggle('rail-on',on);
+  qs.innerHTML=`<button class="qs-h" data-a="quests">Side quests <b>${open}</b></button>${quests.filter(q=>!q.done).map(q=>`<button class="qs" data-a="quest" data-v="${q.id}"><img src="img/${illuFor(q.t)||'star'}.png" alt=""><span>${esc(q.t)}</span></button>`).join('')}<button class="qs more" data-a="quests" aria-label="Ver e adicionar side quests">+</button>`;
+}
+function drawQuest(id){
+  const q=quests.find(x=>x.id===id);if(!q)return;
+  openSheet(`<div class="head"><div class="steps">Side quest · sem prazo</div><button class="x" data-a="close" aria-label="Fechar">×</button></div>
+  <div class="qhero"><img src="img/${illuFor(q.t)||'star'}.png" alt=""><h2>${esc(q.t)}</h2><p class="hint">Vale ${q.xp} XP. Só se der vontade.</p></div>
+  <div class="row" style="justify-content:center"><button class="btn primary" data-a="qdone1" data-v="${q.id}">Feito</button><button class="btn soft" data-a="bora" data-v="quest:${q.id}">Começar 5 min</button><button class="btn soft" data-a="close">Agora não</button></div>
+  <button class="link" data-a="quests">Ver todas as side quests</button>`);
 }
 function drawQuests(){
   openSheet(`<div class="head"><div><div class="steps">Side quests</div><h2>Sem prazo. Se der vontade, faça uma.</h2></div><button class="x" data-a="close" aria-label="Fechar">×</button></div>
-  <div class="list">${quests.map(q=>`<div class="li${q.done?' done':''}"><button class="check${q.done?' on':''}" data-a="qdone" data-v="${q.id}" aria-label="${q.done?'Desmarcar':'Marcar como feita'}">${q.done?'✓':''}</button><div><div class="t">${esc(q.t)}</div><div class="sub">${q.done?'Feita em '+ddmm(parse(q.done)):'+'+q.xp+' XP'}</div></div><button class="x" data-a="qdel" data-v="${q.id}" aria-label="Apagar">×</button></div>`).join('')}</div>
+  <div class="list">${quests.map(q=>`<div class="li${q.done?' done':''}"><button class="check${q.done?' on':''}" data-a="qdone" data-v="${q.id}" aria-label="${q.done?'Desmarcar':'Marcar como feita'}">${q.done?'✓':''}</button><div class="trow">${thumb('quest:'+q.id,{illu:illuFor(q.t)||'star',size:44})}<div><div class="t">${esc(q.t)}</div><div class="sub">${q.done?'Feita em '+ddmm(parse(q.done)):'+'+q.xp+' XP'}</div></div></div><button class="x" data-a="qdel" data-v="${q.id}" aria-label="Apagar">×</button></div>`).join('')}</div>
   <form class="form" id="qForm"><input class="field" id="qt" placeholder="Nova side quest (ex.: Lave o tênis)" aria-label="Nova side quest" required><button class="btn primary">Adicionar</button></form>`);
 }
 function drawProgress(){
@@ -922,7 +970,7 @@ function viewSemana(){
 
 function viewTarefas(){
   const open=openTasks(), done=tasks.filter(t=>t.done);
-  const th=t=>t.client?thumb('cliente:'+t.client,{text:initials(t.client),tone:toneOf(t.client),size:46,edit:true}):thumb('tarefa:'+t.id,{icon:'case',size:46,edit:true});
+  const th=t=>t.client&&photo('cliente:'+t.client)?thumb('cliente:'+t.client,{size:52,edit:true}):thumb(t.client?'cliente:'+t.client:'tarefa:'+t.id,{illu:illuFor(t.t)||(t.client?null:'briefcase'),text:t.client?initials(t.client):'',tone:t.client?toneOf(t.client):'sea',size:52,edit:true});
   let h=`<div class="dayhead"><div><h1>Tarefas</h1><div class="date">Trabalhos e prazos. O app encaixa nos tempos livres.</div></div></div>`;
   h+=`<form class="form three" id="taskForm"><input class="field" id="tt" placeholder="O que fazer (ex.: Edite o episódio)" aria-label="Tarefa" required><input class="field" id="tc" placeholder="Cliente ou projeto" aria-label="Cliente ou projeto" list="clients"><input class="field" id="td" type="date" aria-label="Prazo"><datalist id="clients">${[...new Set(tasks.map(t=>t.client).filter(Boolean))].map(c=>`<option value="${esc(c)}">`).join('')}</datalist><button class="btn primary" style="grid-column:1/-1">Adicionar</button></form>`;
   h+=`<div class="section-title">A fazer (${open.length})</div>`;
@@ -941,8 +989,8 @@ function viewDespensa(){
   cats.forEach(c=>{
     const items=pantry.filter(p=>p.c===c);if(!items.length)return;
     h+=`<div class="section-title">${esc(c)}</div><div class="tiles">${items.map(p=>editPantry
-      ?`<div class="tile">${thumb(p.n,{text:p.n[0],tone:toneOf(c),size:64,edit:true})}<span class="tn">${esc(p.n)}</span><button class="link muted" data-a="pdel" data-v="${esc(p.n)}">Tirar</button></div>`
-      :`<button class="tile${p.have?'':' out'}" data-a="have" data-v="${esc(p.n)}" aria-pressed="${!p.have}">${thumb(p.n,{text:p.n[0],tone:toneOf(c),size:64})}<span class="tn">${esc(p.n)}</span>${p.have?'':'<span class="tag late">acabou</span>'}</button>`).join('')}</div>`;
+      ?`<div class="tile">${thumb(p.n,{illu:illuFor(p.n),text:p.n[0],tone:toneOf(c),size:64,edit:true})}<span class="tn">${esc(p.n)}</span><button class="link muted" data-a="pdel" data-v="${esc(p.n)}">Tirar</button></div>`
+      :`<button class="tile${p.have?'':' out'}" data-a="have" data-v="${esc(p.n)}" aria-pressed="${!p.have}">${thumb(p.n,{illu:illuFor(p.n),text:p.n[0],tone:toneOf(c),size:64})}<span class="tn">${esc(p.n)}</span>${p.have?'':'<span class="tag late">acabou</span>'}</button>`).join('')}</div>`;
   });
   h+=`<div class="section-title">Adicionar item</div><form class="form three" id="pantryForm"><input class="field" id="pn" placeholder="Ex.: Biscoito de polvilho" aria-label="Item" required><select class="field" id="pc" aria-label="Categoria">${cats.map(c=>`<option>${esc(c)}</option>`).join('')}</select><button class="btn primary">Adicionar</button></form>`;
   return h;
@@ -955,10 +1003,25 @@ function daysLabel(p){
   if(s==='1,2,3')return'seg a qua';
   return p.days.map(x=>WDS[x]).join(', ');
 }
-const mapUrl=p=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.addr||(p.n+', Rio das Ostras, RJ'));
+const mapUrl=p=>/^https?:\/\//.test(p.addr||'')?p.addr:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.addr||(p.n+', '+city));
+const placeIllu=p=>illuFor(p.n)||(p.type==='passeio'?'playground-slide':'fork-and-knife-with-plate');
+function drawPlaceEdit(n){
+  const p=places.find(x=>x.n===n);if(!p)return;
+  openSheet(`<div class="head"><div><div class="steps">Editar lugar</div><h2>${esc(p.n)}</h2></div><button class="x" data-a="close" aria-label="Fechar">×</button></div>
+  <div class="trow">${thumb(p.n,{illu:placeIllu(p),size:96,edit:true})}<p class="hint" style="margin:0">Pra foto da fachada: toque em Ver no mapa, tire um print da fachada e depois toque na imagem ao lado.</p></div>
+  <a class="maplink" href="${esc(mapUrl(p))}" target="_blank" rel="noopener">${ic('pin',14)} Ver no mapa</a>
+  <form class="form three" id="placeEdit" data-n="${esc(p.n)}">
+    <div style="grid-column:1/-1"><label class="lbl" for="pe_n">Nome</label><input class="field" id="pe_n" value="${esc(p.n)}" required></div>
+    <div style="grid-column:1/-1"><label class="lbl" for="pe_a">Endereço ou link do Google Maps</label><input class="field" id="pe_a" value="${esc(p.addr||'')}" placeholder="Cole o link do lugar no Maps ou escreva o endereço"></div>
+    <div style="grid-column:1/-1"><label class="lbl" for="pe_o">Observação</label><input class="field" id="pe_o" value="${esc(p.note||'')}"></div>
+    <div style="grid-column:1/-1"><label class="lbl" for="pe_t">Tipo</label><select class="field" id="pe_t"><option value="passeio"${p.type==='passeio'?' selected':''}>Passeio com Israel</option><option value="comida"${p.type==='comida'?' selected':''}>Pra comer</option></select></div>
+    <button class="btn primary" style="grid-column:1/-1">Salvar</button>
+  </form>
+  <button class="link muted" data-a="ldel" data-v="${esc(p.n)}">Tirar este lugar</button>`);
+}
 function viewLugares(){
-  const row=p=>`<div class="li"><div>${thumb(p.n,{icon:p.type==='passeio'?nameIcon(p.n):nameIcon(p.n)==='fork'?'fork':nameIcon(p.n),tone:p.type==='passeio'?'sun':'sea',size:56,edit:true})}</div><div><div class="t"><b>${esc(p.n)}</b></div><div class="sub">${[p.note,daysLabel(p)].filter(Boolean).map(esc).join(' · ')}</div><a class="maplink" href="${mapUrl(p)}" target="_blank" rel="noopener">${ic('pin',14)} Ver no mapa</a></div>${editPlaces?`<button class="x" data-a="ldel" data-v="${esc(p.n)}" aria-label="Tirar">×</button>`:'<span></span>'}</div>`;
-  let h=`<div class="dayhead"><div><h1>Lugares</h1><div class="date">Toque na imagem pra pôr uma foto do lugar.</div></div><button class="link" data-a="editPlaces">${editPlaces?'Pronto':'Editar'}</button></div>`;
+  const row=p=>`<div class="li"><div>${thumb(p.n,{illu:placeIllu(p),tone:p.type==='passeio'?'sun':'sea',size:60,edit:true})}</div><div><button class="pname" data-a="ledit" data-v="${esc(p.n)}"><b>${esc(p.n)}</b> <span class="note">Editar</span></button><div class="sub">${[p.note,daysLabel(p)].filter(Boolean).map(esc).join(' · ')}</div><a class="maplink" href="${mapUrl(p)}" target="_blank" rel="noopener">${ic('pin',14)} Ver no mapa</a></div>${editPlaces?`<button class="x" data-a="ldel" data-v="${esc(p.n)}" aria-label="Tirar">×</button>`:'<span></span>'}</div>`;
+  let h=`<div class="dayhead"><div><h1>Lugares</h1><div class="date">Toque no nome pra corrigir o endereço. Toque na imagem pra pôr a foto da fachada.</div></div><button class="link" data-a="editPlaces">${editPlaces?'Pronto':'Editar'}</button></div>`;
   h+=`<div class="section-title">Lembretes no caminho</div><div class="list">${reminders.map(r=>`<div class="li nochk"><div><div class="t"><b>${esc(r.what)}</b></div><div class="sub">${esc(r.where||'Qualquer lugar no caminho')}</div></div><button class="x" data-a="rdel" data-v="${r.id}" aria-label="Apagar lembrete">×</button></div>`).join('')}</div>
   <form class="form three" id="remForm" style="margin-top:8px"><input class="field" id="rw" placeholder="O que (ex.: comprar carne)" aria-label="O que lembrar" required><input class="field" id="rp" placeholder="Onde (ex.: açougue)" aria-label="Onde" style="grid-column:1/-1"><button class="btn primary" style="grid-column:1/-1">Adicionar lembrete</button></form>
   <p class="hint">Quando o app estiver instalado no celular, ele avisa na hora em que você passar perto. Nesta versão fica só a lista.</p>`;
@@ -1022,7 +1085,8 @@ function drawSettings(confirmReset){
   <div><label class="lbl" for="refIn">Uma sexta em que o fim de semana é com Israel</label><input class="field" type="date" id="refIn" value="${ref}"><p class="hint">O app alterna de 15 em 15 dias a partir dessa data.</p></div>
   <div class="soon"><b>Em breve: aprender com o seu histórico.</b><br>Cruzar Maps, cartão, Pix e agenda pra entender seus dias anteriores e melhorar as sugestões. Tudo guardado só no aparelho.</div>
   <div><button class="btn soft block" data-a="sim">Simular um dia com o Israel</button><p class="hint">Veja a tela mudando hora a hora. Nada fica salvo.</p></div>
-  <p class="hint">Seus dados ficam só neste aparelho e funcionam sem internet.</p>
+  <div><label class="lbl" for="cityIn">Cidade pros mapas</label><input class="field" id="cityIn" value="${esc(city)}"><p class="hint">Usada quando um lugar não tem endereço.</p></div>
+  <p class="hint">Seus dados ficam só neste aparelho e funcionam sem internet. Ilustrações: Fluent Emoji, da Microsoft (licença MIT).</p>
   ${confirmReset?`<div class="ask"><p>Isso apaga tarefas, despensa e lugares que você mudou e volta pros dados iniciais.</p><div class="row"><button class="btn coral" data-a="reset2">Apagar e recomeçar</button><button class="btn soft" data-a="settings">Cancelar</button></div></div>`:`<button class="btn soft" data-a="reset1">Restaurar dados iniciais</button>`}`);
 }
 
@@ -1050,6 +1114,8 @@ document.addEventListener('click',e=>{
     case 'cal':{const t=today(),m=calMonth||new Date(t.getFullYear(),t.getMonth(),1);calMonth=new Date(m.getFullYear(),m.getMonth()+(+v),1);render();break}
     case 'evdel':events=events.filter(e=>e.id!==v);save();render();break;
     case 'quests':drawQuests();break;
+    case 'quest':drawQuest(v);break;
+    case 'qdone1':{const q=quests.find(x=>x.id===v);if(q&&!q.done){q.done=key(today());addXP(q.xp);toast('+'+q.xp+' XP. Side quest feita!')}save();closeSheet();render();break}
     case 'qdone':{const q=quests.find(x=>x.id===v);if(q){q.done=q.done?'':key(today());addXP(q.done?q.xp:-q.xp);if(q.done)toast('+'+q.xp+' XP. Side quest feita!')}save();drawQuests();renderHeader();break}
     case 'qdel':quests=quests.filter(x=>x.id!==v);save();drawQuests();renderHeader();break;
     case 'water':{const wk=key(today()),n=Math.min(12,(water[wk]||0)+1);water[wk]=n;addXP(2);save();renderHeader();toast(n>=8?'Meta de água batida!':`Mais um copo. ${n} de 8.`);break}
@@ -1063,10 +1129,11 @@ document.addEventListener('click',e=>{
     case 'why':whyOpen=!whyOpen;if($('#wact'))renderActions();else render();break;
     case 'gonow':wheelId=null;whyOpen=false;renderActions();centerOn($('.wi[data-cur]'),true);break;
     case 'sim':startSim();break;
+    case 'simtoday':startSim(key(realToday()));break;
     case 'simexit':exitSim();break;
     case 'simstep':SIM.m=Math.min(1350,Math.max(360,SIM.m+(+v)));wheelId=null;whyOpen=false;render();break;
     case 'all':showAll=!showAll;render();break;
-    case 'bora':{const s=findStep(v);if(s)startTimer(s.head,s.detail);break}
+    case 'bora':{if(v.startsWith('quest:')){const q=quests.find(x=>'quest:'+x.id===v);if(q)startTimer(q.t,'Side quest');break}const s=findStep(v);if(s)startTimer(s.head,s.detail);break}
     case 'rdel':reminders=reminders.filter(x=>x.id!==v);save();render();break;
     case 'refyes':ref=v;S.set('refOk',true);save();render();break;
     case 'refno':ref=key(add(parse(v),7));S.set('refOk',true);save();render();break;
@@ -1075,7 +1142,8 @@ document.addEventListener('click',e=>{
     case 'have':{const p=pantry.find(x=>x.n===v);if(p)p.have=!p.have;save();render();break}
     case 'pdel':pantry=pantry.filter(x=>x.n!==v);save();render();break;
     case 'editPantry':editPantry=!editPantry;render();break;
-    case 'ldel':places=places.filter(x=>x.n!==v);save();render();break;
+    case 'ldel':places=places.filter(x=>x.n!==v);save();if(!$('#sheet').hidden)closeSheet();render();break;
+    case 'ledit':drawPlaceEdit(v);break;
     case 'editPlaces':editPlaces=!editPlaces;render();break;
     case 'travei':TV={step:1,items:[]};drawTravei();break;
     case 'tv2':{TV.raw=$('#dump').value;TV.items=TV.raw.split('\n').map(s=>s.trim()).filter(Boolean);if(!TV.items.length){$('#dump').focus();break}if(TV.items.length===1){TV.pick=TV.items[0];TV.step=3}else TV.step=2;drawTravei();break}
@@ -1098,6 +1166,7 @@ document.addEventListener('input',e=>{
   if(e.target.id==='simT'){const m=+e.target.value;$('#simLbl').textContent=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='cityIn'){city=e.target.value.trim()||'Rio das Ostras, RJ';S.set('city',city);return}
   if(e.target.dataset&&e.target.dataset.photo!=null){const f=e.target.files&&e.target.files[0];if(f)setPhoto(e.target.dataset.photo,f);return}
   if(e.target.id==='simT'){SIM.m=+e.target.value;wheelId=null;whyOpen=false;render();return}
   if(e.target.id==='simDay'){SIM.date=e.target.value;sel=today();doneMap={};later={};shifts={};wheelId=null;render();return}
@@ -1108,6 +1177,13 @@ document.addEventListener('submit',e=>{
   const f=e.target;
   if(f.id==='taskForm'){const t=$('#tt').value.trim();if(!t)return;tasks.push({id:'t'+Date.now(),t,client:$('#tc').value.trim(),due:$('#td').value||'',done:false});save();render();$('#tt').focus()}
   if(f.id==='evForm'){const t=$('#et').value.trim(),d=$('#ed').value;if(!t||!d)return;events.push({id:'e'+Date.now(),t,d,h:$('#eh').value||'',c:$('#ec').value,rep:$('#er').checked?'mensal':''});save();render()}
+  if(f.id==='placeEdit'){
+    const old=f.dataset.n,p=places.find(x=>x.n===old);if(!p)return;
+    const nn=$('#pe_n').value.trim()||old;
+    if(nn!==old){const ph=photo(old);if(ph){try{localStorage.setItem(imgKey(nn),JSON.stringify(ph));localStorage.removeItem(imgKey(old))}catch(e){}}}
+    p.n=nn;p.addr=$('#pe_a').value.trim();p.note=$('#pe_o').value.trim();p.type=$('#pe_t').value;
+    if(p.type==='comida'&&!p.meals)p.meals=['almoco','jantar'];
+    save();closeSheet();render();toast('Lugar salvo');return}
   if(f.id==='qForm'){const t=$('#qt').value.trim();if(!t)return;quests.push({id:'q'+Date.now(),t,xp:30,done:''});save();drawQuests();renderHeader()}
   if(f.id==='pantryForm'){const n=$('#pn').value.trim();if(!n||pantry.some(p=>p.n.toLowerCase()===n.toLowerCase()))return;pantry.push({n,c:$('#pc').value,have:true});save();render()}
   if(f.id==='remForm'){const w=$('#rw').value.trim();if(!w)return;reminders.push({id:'r'+Date.now(),what:w,where:$('#rp').value.trim()});save();render()}
