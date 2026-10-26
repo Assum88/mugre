@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carrossel Bastidor Samuel</title>
+<link rel="stylesheet" href="marca.css">
+<style>
+/* Layout: uma tira contínua de 8 slides 1080×1350 (8640px) cortada pelo Instagram; uma curva exponencial atravessa tudo, do bastidor (plano) ao palco (topo). A página mostra a tira inteira e depois slide a slide, com a nota de animação. Com ?export, mostra só a tira em 1:1 para o exportador. */
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--paper);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+.page{max-width:1240px;margin:0 auto;padding:32px 16px 72px;display:grid;gap:40px}
+header{display:grid;gap:10px}
+.eyebrow{font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+h1{font:900 clamp(44px,8vw,84px)/.92 var(--display);text-transform:uppercase;margin:0;letter-spacing:.005em;text-wrap:balance}
+.lede{color:var(--mute);max-width:64ch;margin:0}
+.flag{border:1px dashed var(--amber);border-radius:10px;padding:12px 14px;max-width:72ch;font-size:15px;color:var(--paper)}
+.flag b{color:var(--amber)}
+h2{font:700 30px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;margin:0 0 12px}
+.sec-note{color:var(--mute);font-size:14px;margin:0 0 14px}
+
+/* panorama */
+.pano{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#0A0C16;padding:14px;scrollbar-color:var(--line) transparent}
+.pano-inner{position:relative}
+.pano .seam{position:absolute;top:0;bottom:0;width:0;border-left:1px dashed color-mix(in srgb,var(--amber) 55%,transparent);pointer-events:none}
+.pano .seam span{position:absolute;top:-1px;left:4px;font:700 11px/1 var(--mono);color:var(--amber);background:#0A0C16;padding:3px 4px}
+.scaler{position:absolute;top:0;left:0;transform-origin:0 0}
+
+/* slide a slide */
+.viewer{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:32px;align-items:start}
+.stage-wrap{display:grid;gap:12px}
+.stage{position:relative;width:100%;aspect-ratio:1080/1350;max-width:100%;overflow:hidden;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+.ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ctrls button{font:700 14px/1 var(--mono);background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:999px;min-height:44px;padding:0 16px}
+.ctrls button.go{background:var(--amber);color:var(--paper-ink);border-color:var(--amber)}
+.ctrls button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.ctrls .pos{font:700 14px/1 var(--mono);color:var(--mute);margin-left:auto;font-variant-numeric:tabular-nums}
+.dots{display:flex;gap:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--amber)}
+.notes{display:grid;gap:18px;min-width:0}
+.notes .n-step{font:700 13px/1 var(--mono);letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+.notes h3{font:900 44px/.95 var(--display);text-transform:uppercase;margin:0;text-wrap:balance}
+.notes .blk{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:8px}
+.notes .blk b{font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.notes ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.notes ol li::marker{font-family:var(--mono);color:var(--amber)}
+.notes p{margin:0}
+.tc{font-family:var(--mono);font-size:13px;color:var(--amber);font-variant-numeric:tabular-nums}
+@media (max-width:860px){.viewer{grid-template-columns:minmax(0,1fr)}}
+
+/* modo exportação: só a tira, 1:1 */
+body.export{background:var(--ink)}
+body.export .page{display:none}
+#exportRoot{display:none}
+body.export #exportRoot{display:block;width:8640px;height:1350px}
+
+/* ======== A TIRA (coordenadas em px reais do Instagram) ======== */
+.strip{position:relative;width:8640px;height:1350px;overflow:hidden;font-family:var(--body);color:var(--paper);
+  background:
+    radial-gradient(1000px 900px at 1080px 380px,color-mix(in srgb,var(--glow) 26%,transparent),transparent 70%),
+    radial-gradient(1200px 700px at 4300px 1350px,color-mix(in srgb,var(--blue) 22%,transparent),transparent 70%),
+    radial-gradient(1100px 900px at 7020px 0px,color-mix(in srgb,var(--amber) 28%,transparent),transparent 70%),
+    radial-gradient(900px 900px at 8500px 120px,color-mix(in srgb,var(--amber) 22%,transparent),transparent 70%),
+    var(--ink)}
+.strip .grain{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);pointer-events:none}
+.strip svg.waves{position:absolute;inset:0;width:8640px;height:1350px}
+.strip svg.curve{position:absolute;inset:0;width:8640px;height:1350px;overflow:visible}
+.s{position:absolute;top:0;width:1080px;height:1350px}
+.s .pg{position:absolute;right:80px;top:80px;font:500 26px/1 var(--mono);color:var(--mute);font-variant-numeric:tabular-nums}
+.s .lab{position:absolute;left:80px;top:80px;font:700 26px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.s .hd{position:absolute;left:80px;top:180px;width:920px;margin:0;font:900 96px/.95 var(--display);text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+.s .hd em{font-style:normal;color:var(--amber)}
+.s .txt{position:absolute;left:80px;width:860px;display:grid;gap:24px}
+.s .tx{margin:0;font:400 42px/1.36 var(--body);color:var(--paper);text-wrap:pretty}
+.s .tops{list-style:none;margin:0;padding:0;display:grid;gap:12px;font:400 40px/1.3 var(--body);color:var(--paper)}
+.s .tops li{position:relative;padding-left:44px}
+.s .tops li::before{content:"";position:absolute;left:0;top:.36em;width:20px;height:20px;border:3px solid var(--amber);border-radius:4px}
+.s .tops.warm{font-size:36px;gap:14px}
+.s .tops.warm b{font-weight:600;color:var(--amber)}
+.s .flow{position:absolute;left:80px;width:920px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.s .flow-line{position:absolute;left:12px;right:12px;top:11px;height:4px;background:var(--amber);opacity:.6}
+.s .st{position:relative;display:grid;gap:10px;align-content:start}
+.s .st i{width:26px;height:26px;border-radius:50%;background:var(--ink);border:4px solid var(--amber);display:block}
+.s .st.key i{background:var(--amber)}
+.s .st b{font:700 18px/1.25 var(--mono);letter-spacing:.02em;text-transform:uppercase;color:var(--amber);margin-top:6px}
+.s .st span{font:400 30px/1.28 var(--body);color:var(--paper)}
+.mono{font-family:var(--mono)}
+.s .tx.serif{font-family:var(--serif);font-style:italic}
+
+/* foto do Samuel: o <img> só aparece quando o arquivo de marca.css carrega; senão fica a silhueta */
+.foto{position:absolute;left:var(--foto-left);top:var(--foto-top);width:var(--foto-width);height:var(--foto-height)}
+.foto img{display:none;width:100%;height:100%;object-fit:contain;object-position:center bottom;
+  filter:drop-shadow(-18px 0 40px color-mix(in srgb,var(--amber) 28%,transparent))}
+.foto .ph{position:absolute;left:20px;top:60px}
+.foto.ok img{display:block}
+.foto.ok .ph{display:none}
+/* logo oficial */
+.logo{position:absolute;left:80px;top:1150px;width:440px;height:100px}
+.logo img{display:none;width:100%;height:100%;object-fit:contain;object-position:left center}
+.logo .ph{width:100%;height:100%;border:3px dashed var(--mute);border-radius:8px;display:grid;place-items:center;font:500 24px/1 var(--mono);letter-spacing:.14em;color:var(--mute)}
+.logo.ok img{display:block}
+.logo.ok .ph{display:none}
+
+/* animações de prévia (só disparam no visor slide a slide) */
+@keyframes up{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+@keyframes mask{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.06)}100%{opacity:1;transform:none}}
+@keyframes tilt{from{opacity:0;transform:translateY(120px) rotate(-8deg)}to{opacity:1}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.play [data-a]{animation-duration:.9s;animation-timing-function:cubic-bezier(.2,.8,.2,1);animation-fill-mode:both;animation-delay:calc(var(--d,0) * 1ms)}
+.play [data-a="up"]{animation-name:up}
+.play [data-a="mask"]{animation-name:mask;animation-duration:1.1s}
+.play [data-a="pop"]{animation-name:pop}
+.play [data-a="tilt"]{animation-name:tilt}
+.play [data-a="grow"]{animation-name:grow;transform-origin:0 50%}
+@media (prefers-reduced-motion: reduce){.play [data-a]{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Oratória Exponencial · Carrossel · Autoridade / bastidor</div>
+    <h1>Como o Samuel prepara uma palestra</h1>
+    <p class="lede">8 slides em 4:5 (1080×1350) montados como uma tira só. Uma curva exponencial atravessa o carrossel inteiro: começa rente ao chão no bastidor e sobe até o palco no último slide. Cada etapa do preparo é um ponto nessa curva.</p>
+    <p class="flag" id="flag" hidden><b>Faltam assets.</b> <span id="faltam"></span> Solte os arquivos em <code>assets/</code> (caminhos em <code>marca.css</code>).</p>
+  </header>
+
+  <section>
+    <h2>A tira inteira</h2>
+    <p class="sec-note">As linhas tracejadas marcam onde o Instagram corta. Arraste para o lado para ver tudo.</p>
+    <div class="pano" id="pano"><div class="pano-inner" id="panoInner"></div></div>
+  </section>
+
+  <section>
+    <h2>Slide a slide, com movimento</h2>
+    <p class="sec-note">“Tocar animação” mostra um esboço da entrada de cada slide. A animação final sai desta nota.</p>
+    <div class="viewer">
+      <div class="stage-wrap">
+        <div class="stage" id="stage"></div>
+        <div class="ctrls">
+          <button type="button" id="prev" aria-label="Slide anterior">←</button>
+          <button type="button" id="next" aria-label="Próximo slide">→</button>
+          <button type="button" class="go" id="play">▶ Tocar animação</button>
+          <span class="pos" id="pos">01 / 08</span>
+        </div>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+      <div class="notes" id="notes" aria-live="polite"></div>
+    </div>
+  </section>
+</div>
+<div id="exportRoot"></div>
+
+<template id="stripTpl">
+<div class="strip">
+  <svg class="waves" viewBox="0 0 8640 1350" aria-hidden="true"></svg>
+  <svg class="curve" viewBox="0 0 8640 1350" aria-hidden="true">
+    <defs>
+      <linearGradient id="cg" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" style="stop-color:var(--amber-deep);stop-opacity:.45"/>
+        <stop offset=".55" style="stop-color:var(--amber);stop-opacity:.7"/>
+        <stop offset="1" style="stop-color:var(--amber)"/>
+      </linearGradient>
+    </defs>
+    <g class="ticks"></g>
+    <path class="cpath" fill="none" stroke="url(#cg)" stroke-width="6" stroke-linecap="round"/>
+    <g class="nodes"></g>
+  </svg>
+  <div class="grain"></div>
+
+  <!-- 1 · CAPA -->
+  <section class="s" style="left:0">
+    <div class="lab" data-a="up">Bastidor</div>
+    <div class="pg">01/08</div>
+    <h2 class="hd" style="top:240px;width:680px;font-size:150px;line-height:.9" data-a="mask" data-d="100">Como eu preparo uma <em>palestra</em></h2>
+    <div class="txt" style="top:830px;width:600px" data-a="up" data-d="500"><p class="tx serif">Do dia em que o convite chega até os minutos antes de subir no palco.</p></div>
+    <div class="mono" style="position:absolute;left:80px;top:1080px;font-size:26px;color:var(--amber);letter-spacing:.1em" data-a="up" data-d="800">ARRASTA →</div>
+    <!-- foto atravessa o corte 1→2 -->
+    <div class="foto" data-a="up">
+      <img alt="Samuel">
+      <svg class="ph" viewBox="0 0 700 960" width="700" height="960" aria-hidden="true">
+        <defs><linearGradient id="ph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--line)"/><stop offset="1" style="stop-color:var(--ink-2)"/></linearGradient></defs>
+        <path d="M350 60c95 0 160 75 160 175 0 80-40 140-90 165 150 30 250 150 280 330l0 230H0V730c30-180 130-300 280-330-50-25-90-85-90-165 0-100 65-175 160-175z" fill="url(#ph)" style="stroke:var(--amber)" stroke-opacity=".5" stroke-width="3" stroke-dasharray="14 10"/>
+        <text x="350" y="700" text-anchor="middle" style="fill:var(--mute);font-family:var(--mono)" font-size="24" font-weight="700" letter-spacing="3">FOTO SAMUEL</text>
+        <text x="350" y="736" text-anchor="middle" style="fill:var(--mute);font-family:var(--mono)" font-size="20">recorte PNG, luz lateral</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 2 · O CONVITE -->
+  <section class="s" style="left:1080px">
+    <div class="lab" style="left:380px" data-a="up">1 · O convite</div>
+    <div class="pg">02/08</div>
+    <h2 class="hd" style="left:380px;top:180px;width:620px;font-size:86px" data-a="mask" data-d="150">Geralmente, o tema <em>já vem no convite.</em></h2>
+    <div class="txt" style="left:380px;top:470px;width:620px" data-a="up" data-d="500">
+      <p class="tx">A partir dele, eu direciono a palestra para quem vai estar na plateia.</p>
+      <p class="tx">Uma equipe de vendas, representantes farmacêuticos ou líderes de empresa podem receber o mesmo tema, e cada grupo precisa ouvir de um jeito diferente.</p>
+    </div>
+  </section>
+
+  <!-- 3 · A PESQUISA -->
+  <section class="s" style="left:2160px">
+    <div class="lab" data-a="up">2 · A pesquisa</div>
+    <div class="pg">03/08</div>
+    <h2 class="hd" data-a="mask" data-d="150">Estudo o tema mesmo quando <em>acho que já sei.</em></h2>
+    <div class="txt" style="top:510px" data-a="up" data-d="500">
+      <p class="tx">Leio sobre o assunto, procuro dados e vou anotando histórias que podem virar exemplo.</p>
+      <p class="tx">Junto bem mais material do que cabe na palestra. Assim, na hora de montar, tenho de onde escolher.</p>
+    </div>
+  </section>
+
+  <!-- 4 · A ESTRUTURA -->
+  <section class="s" style="left:3240px">
+    <div class="lab" data-a="up">3 · A estrutura</div>
+    <div class="pg">04/08</div>
+    <h2 class="hd" data-a="mask" data-d="150">Antes dos slides, eu <em>rascunho a sequência.</em></h2>
+    <div class="txt" style="top:410px" data-a="up" data-d="500">
+      <p class="tx">Traço uma linha com os grandes blocos da palestra. A ordem segue o caminho da plateia: ficar curiosa logo no começo, entender o tema e se reconhecer no problema antes de ouvir a solução.</p>
+    </div>
+    <!-- a linha do rascunho -->
+    <div class="flow" style="top:820px" data-a="up" data-d="800">
+      <div class="flow-line" data-a="grow" data-d="900"></div>
+      <div class="st"><i></i><b>Por que estou ali</b><span>abrir com impacto e curiosidade</span></div>
+      <div class="st"><i></i><b>Introdução do tema</b><span>do que vamos falar</span></div>
+      <div class="st key"><i></i><b>Identificação</b><span>a plateia se vê no problema</span></div>
+      <div class="st"><i></i><b>Conteúdo</b><span>o caminho pra resolver</span></div>
+      <div class="st"><i></i><b>Fechamento</b><span>o que levar pra casa</span></div>
+    </div>
+  </section>
+
+  <!-- 5 · O ENSAIO -->
+  <section class="s" style="left:4320px">
+    <div class="lab" data-a="up">4 · O ensaio</div>
+    <div class="pg">05/08</div>
+    <h2 class="hd" data-a="mask" data-d="150">Ensaio em voz alta, em pé, <em>gravando no celular.</em></h2>
+    <div class="txt" style="top:500px;width:590px" data-a="up" data-d="500">
+      <p class="tx" style="font-size:40px">Depois eu assisto à gravação. No vídeo aparecem vícios que passam batido enquanto falo, como uma palavra repetida ou um gesto que volta toda hora.</p>
+      <p class="tx" style="font-size:40px">Ensaio quantas vezes for preciso, até me sentir seguro do começo ao fim.</p>
+    </div>
+    <!-- celular gravando -->
+    <div style="position:absolute;left:710px;top:520px;width:270px;height:480px;border:4px solid var(--mute);border-radius:42px;padding:16px" data-a="tilt" data-d="700">
+      <div style="width:100%;height:100%;border-radius:28px;background:var(--ink-2);position:relative;overflow:hidden">
+        <div class="mono" style="position:absolute;left:16px;top:16px;display:flex;align-items:center;gap:10px;font-size:20px;color:var(--paper)"><i class="rec-dot" style="width:14px;height:14px;border-radius:50%;background:var(--rec);display:inline-block"></i>REC</div>
+        <div class="mono rec-time" style="position:absolute;right:16px;top:16px;font-size:20px;color:var(--paper);font-variant-numeric:tabular-nums">38:12</div>
+        <svg viewBox="0 0 240 300" width="214" height="268" style="position:absolute;left:10px;bottom:0" aria-hidden="true"><path d="M120 40c32 0 54 25 54 58 0 27-14 47-30 55 50 10 84 50 94 110v37H2v-37c10-60 44-100 94-110-16-8-30-28-30-55 0-33 22-58 54-58z" style="fill:var(--line)"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · A VÉSPERA -->
+  <section class="s" style="left:5400px">
+    <div class="lab" data-a="up">5 · A véspera</div>
+    <div class="pg">06/08</div>
+    <h2 class="hd" data-a="mask" data-d="150">Na véspera, <em>não mexo mais</em> na palestra.</h2>
+    <div class="txt" style="top:430px" data-a="up" data-d="500">
+      <p class="tx">Se eu mudo alguma coisa em cima da hora, no palco a cabeça ainda está na versão antiga.</p>
+      <p class="tx">Na noite anterior, deixo tudo pronto:</p>
+      <ul class="tops">
+        <li>Roupa separada</li>
+        <li>Arquivo da palestra no pendrive e na nuvem, porque, se um falhar na hora, tenho o outro</li>
+        <li>Cabos na mochila</li>
+        <li>Dormir cedo, pra acordar disposto</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 · DIA D -->
+  <section class="s" style="left:6480px">
+    <svg style="position:absolute;left:0;top:0" width="1080" height="1350" viewBox="0 0 1080 1350" aria-hidden="true"><polygon class="beam" points="460,0 620,0 1000,1350 80,1350" style="fill:var(--amber)" opacity=".07"/></svg>
+    <div class="pg">07/08</div>
+    <h2 class="hd" style="top:110px;font-size:230px;line-height:.85;color:var(--amber)" data-a="pop">Dia D</h2>
+    <div class="txt" style="top:350px;width:920px" data-a="up" data-d="400">
+      <p class="tx" style="font-size:40px">Como pouco e só coisa que já conheço. O nervoso mexe com o estômago, e no meio da palestra não dá pra sair do palco. E procuro me hidratar bem.</p>
+    </div>
+    <div class="mono" style="position:absolute;left:80px;top:620px;font-size:22px;letter-spacing:.12em;color:var(--amber)" data-a="up" data-d="700">AQUECIMENTO DE VOZ · NO CARRO OU NO BANHEIRO, ANTES DE CHEGAR</div>
+    <ul class="tops warm" style="position:absolute;left:80px;top:670px;width:920px" data-a="up" data-d="900">
+      <li><b>Respiração:</b> inspiro pelo nariz enchendo a barriga e solto devagar, num “sss” contínuo.</li>
+      <li><b>Vibração de lábios:</b> um “brrrr” variando o tom.</li>
+      <li><b>Bocejo:</b> abro bem a boca e solto a mandíbula.</li>
+      <li><b>Trava-línguas:</b> em voz alta, exagerando cada sílaba.</li>
+    </ul>
+  </section>
+
+  <!-- 8 · FECHAMENTO -->
+  <section class="s" style="left:7560px">
+    <div class="pg">08/08</div>
+    <h2 class="hd" style="top:160px;width:600px;font-size:84px" data-a="mask">Se você tem uma apresentação chegando, <em>salva este post.</em></h2>
+    <div class="txt" style="top:530px;width:560px" data-a="up" data-d="500"><p class="tx serif" style="font-size:40px">E me conta nos comentários: qual dessas etapas você costuma pular?</p></div>
+    <!-- logo oficial -->
+    <div class="logo" data-a="up" data-d="800"><img alt="Oratória Exponencial"><div class="ph">LOGO OFICIAL</div></div>
+  </section>
+</div>
+</template>
+
+<script src="animacao.js"></script>
+<script>
+(async function(){
+  const W=8640,H=1350,SW=1080;
+  const EXPORT=new URLSearchParams(location.search).has('export');
+  const css=getComputedStyle(document.documentElement);
+  const tok=n=>css.getPropertyValue(n).trim();
+  const path=n=>tok(n).replace(/^["']|["']$/g,'');
+
+  // assets declarados em marca.css: carrega uma vez; se faltar, fica o placeholder
+  const load=src=>new Promise(r=>{if(!src)return r(null);const i=new Image();i.onload=()=>r(src);i.onerror=()=>r(null);i.src=src});
+  const [foto,logo]=await Promise.all([load(path('--foto-samuel')),load(path('--logo'))]);
+  const faltam=[!foto&&'foto do Samuel ('+path('--foto-samuel')+')',!logo&&'logo ('+path('--logo')+')'].filter(Boolean);
+
+  // curva exponencial: plana no bastidor, sobe no palco
+  const base=1215, A=1035, k=14;
+  const yAt=x=>{const t=x/W;return base-A*(Math.exp(k*t)-1)/(Math.exp(k)-1)};
+  window.__yAt=yAt; // usado por animacao.js
+  // [cx,cy,raio inicial,anéis,cor,opacidade,semente]
+  const waves=[[1080,560,120,16,'--blue-light',.20,0],[3780,1300,160,12,'--blue-light',.12,2],[6200,80,140,12,'--gold',.14,4],[8380,260,90,14,'--gold-light',.18,1]];
+  const steps=[['Bastidor',80],['Convite',1160],['Pesquisa',2240],['Estrutura',3320],['Ensaio',4400],['Véspera',5480],['Dia D',6560],['Palco',8460]];
+
+  function buildStrip(){
+    const node=document.getElementById('stripTpl').content.firstElementChild.cloneNode(true);
+    node.querySelectorAll('[data-d]').forEach(el=>el.style.setProperty('--d',el.dataset.d));
+    if(foto){const f=node.querySelector('.foto');f.querySelector('img').src=foto;f.classList.add('ok')}
+    if(logo){const l=node.querySelector('.logo');l.querySelector('img').src=logo;l.classList.add('ok')}
+    const NS='http://www.w3.org/2000/svg';
+    // ondas concêntricas do manual (linhas sonoras), como textura de fundo
+    const wv=node.querySelector('svg.waves');
+    waves.forEach(([cx,cy,r0,n,color,op,seed])=>{
+      const g=document.createElementNS(NS,'g');g.setAttribute('class','wave');g.style.transformOrigin=cx+'px '+cy+'px';wv.appendChild(g);
+      for(let j=0;j<n;j++){const R=r0+j*34;let d='';
+        for(let a=0;a<=360;a+=4){const t=a*Math.PI/180,w=R+18*Math.sin(3*t+seed+j*.35)+10*Math.sin(5*t-seed*1.7+j*.2);
+          d+=(a?'L':'M')+(cx+w*Math.cos(t)).toFixed(1)+' '+(cy+w*.82*Math.sin(t)).toFixed(1)}
+        const pth=document.createElementNS(NS,'path');pth.setAttribute('d',d+'Z');pth.setAttribute('fill','none');
+        pth.style.stroke='var('+color+')';pth.setAttribute('stroke-width','2');pth.setAttribute('stroke-opacity',(op*(1-j/n*.6)).toFixed(3));g.appendChild(pth)}});
+    const svg=node.querySelector('svg.curve');
+    let d='';for(let x=40;x<=8540;x+=20)d+=(x===40?'M':'L')+x+' '+yAt(x).toFixed(1);
+    svg.querySelector('.cpath').setAttribute('d',d);
+    const tg=svg.querySelector('.ticks');
+    for(let x=60;x<=8520;x+=60){const y=yAt(x),l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',x);l.setAttribute('x2',x);l.setAttribute('y1',y+14);l.setAttribute('y2',y+(x%540===0?44:26));
+      l.style.stroke='var(--mute)';l.setAttribute('stroke-opacity','.35');l.setAttribute('stroke-width','2');tg.appendChild(l)}
+    const ng=svg.querySelector('.nodes');
+    steps.forEach(([lab,x],i)=>{const y=yAt(x),last=i===steps.length-1;
+      const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',last?22:13);if(last)c.setAttribute('class','palco');
+      c.style.fill=i>=6?'var(--amber)':'var(--ink)';c.style.stroke='var(--amber)';c.setAttribute('stroke-width','5');ng.appendChild(c);
+      const t=document.createElementNS(NS,'text');t.textContent=lab.toUpperCase();
+      t.setAttribute('x',last?x-40:x+26);t.setAttribute('y',last?y+70:y-22);t.setAttribute('text-anchor',last?'end':'start');
+      t.style.fill=i>=5?'var(--amber)':'var(--mute)';t.style.fontFamily='var(--mono)';t.setAttribute('font-size','24');
+      t.setAttribute('font-weight','700');t.setAttribute('letter-spacing','4');ng.appendChild(t)});
+    return node;
+  }
+
+  // lido pelo exportar.mjs
+  window.__carrossel={faltam,pronto:false};
+
+  if(EXPORT){
+    document.body.classList.add('export');
+    document.getElementById('exportRoot').appendChild(buildStrip());
+    await document.fonts.ready;
+    await Promise.all([...document.images].map(i=>i.complete?0:new Promise(r=>{i.onload=i.onerror=r})));
+    window.__carrossel.pronto=true;
+    return;
+  }
+
+  if(faltam.length){document.getElementById('flag').hidden=false;document.getElementById('faltam').textContent='Ainda com placeholder: '+faltam.join(' e ')+'.'}
+
+  // panorama
+  const pi=document.getElementById('panoInner');
+  const sp=document.createElement('div');sp.className='scaler';sp.appendChild(buildStrip());pi.appendChild(sp);
+  for(let i=1;i<8;i++){const s=document.createElement('div');s.className='seam';s.dataset.i=i;s.innerHTML='<span>'+String(i+1).padStart(2,'0')+'</span>';pi.appendChild(s)}
+  function fitPano(){const s=window.innerWidth<600?.17:.27;sp.style.transform='scale('+s+')';pi.style.width=W*s+'px';pi.style.height=H*s+'px';
+    pi.querySelectorAll('.seam').forEach(el=>el.style.left=(el.dataset.i*SW*s)+'px')}
+
+  // visor
+  const stage=document.getElementById('stage'),vs=document.createElement('div');vs.className='scaler';
+  const vstrip=buildStrip();vs.appendChild(vstrip);stage.appendChild(vs);
+  const secs=[...vstrip.querySelectorAll('section.s')];
+  let cur=0;
+  function fitStage(){const s=stage.clientWidth/SW;vs.style.transform='scale('+s+') translateX('+(-cur*SW)+'px)'}
+
+  const N=[
+    {t:'Capa',h:'Como eu preparo uma palestra',m:['Tela escura. Um feixe de luz âmbar acende da direita e revela a foto do Samuel.','O título entra por máscara, linha a linha; “palestra” acende por último.','A curva corre pelo rodapé e some no corte, puxando o swipe.'],c:'A foto atravessa o corte com o slide 2.'},
+    {t:'O convite',h:'Geralmente, o tema já vem no convite',m:['Título por máscara.','Os dois parágrafos sobem um depois do outro.','Opcional: “vendas”, “representantes farmacêuticos” e “líderes” trocam de lugar rapidamente, como etiquetas.'],c:'O resto da foto do slide 1 ocupa a esquerda; o texto fica à direita.'},
+    {t:'A pesquisa',h:'Estudo o tema mesmo quando acho que já sei',m:['Título por máscara.','Os dois parágrafos sobem um depois do outro.','Opcional: folhas de anotação passam ao fundo, bem apagadas.'],c:'Só texto. A curva segue reta no rodapé.'},
+    {t:'A estrutura',h:'Antes dos slides, eu rascunho a sequência',m:['Título e parágrafo entram.','A linha do rascunho é traçada da esquerda para a direita, como uma caneta.','Cada bloco acende quando a linha passa; “Identificação” fica preenchida, porque é ela que explica a ordem.'],c:'Blocos genéricos de propósito: o que importa é a lógica da sequência.'},
+    {t:'O ensaio',h:'Ensaio em voz alta, em pé, gravando no celular',m:['Título por máscara.','O celular entra girando de leve; o REC pisca e o cronômetro corre.','O texto sobe ao lado.'],c:'Único slide com objeto ilustrado: o celular gravando.'},
+    {t:'A véspera',h:'Na véspera, não mexo mais na palestra',m:['Título por máscara.','O parágrafo sobe.','Os quatro itens entram um a um e cada caixinha é marcada.'],c:'Tópicos curtos, como uma lista de mala.'},
+    {t:'Dia D',h:'Dia D',m:['O feixe de luz abre do topo como um refletor ligando; “DIA D” surge com um pop.','O parágrafo sobre comida e água sobe.','Os exercícios entram um a um; no “brrrr”, as letras tremem de leve.'],c:'Slide com mais texto do carrossel. Se ficar pesado no celular, o aquecimento pode virar um slide próprio.'},
+    {t:'Fechamento',h:'Se você tem uma apresentação chegando, salva este post',m:['A curva sobe até o canto superior e termina num ponto que acende como refletor.','O título entra; “salva este post” acende no âmbar.','Pergunta e assinatura sobem por último.'],c:'O espaço do logo oficial fica embaixo, à esquerda, fora do caminho da curva.'}
+  ];
+  const notes=document.getElementById('notes'),pos=document.getElementById('pos'),dots=document.getElementById('dots');
+  dots.innerHTML='<i></i>'.repeat(8);
+  function render(play){
+    fitStage();
+    const n=N[cur];
+    notes.innerHTML='<div class="n-step">Slide '+String(cur+1).padStart(2,'0')+' · '+n.t+'</div><h3>'+n.h+'</h3>'+
+      '<div class="blk"><b>Movimento</b><ol>'+n.m.map(x=>'<li>'+x+'</li>').join('')+'</ol></div>'+
+      '<div class="blk"><b>Composição</b><p>'+n.c+'</p></div>'+
+      '<div class="blk"><b>Transição pro próximo</b><p>A tira desliza para a esquerda e a curva continua sem corte. <span class="tc">≈ 0,6s</span></p></div>';
+    pos.textContent=String(cur+1).padStart(2,'0')+' / 08';
+    [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+    secs.forEach(s=>s.classList.remove('play'));
+    if(play){void secs[cur].offsetWidth;secs[cur].classList.add('play')}
+  }
+  document.getElementById('prev').onclick=()=>{cur=(cur+7)%8;render(true)};
+  document.getElementById('next').onclick=()=>{cur=(cur+1)%8;render(true)};
+  document.getElementById('play').onclick=()=>render(true);
+  window.addEventListener('resize',()=>{fitPano();fitStage()});
+  fitPano();render(false);
+})();
+</script>
+</body>
+</html>

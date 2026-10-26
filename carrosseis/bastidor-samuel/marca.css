@@ -1,0 +1,56 @@
+/*
+  MARCA DO CARROSSEL: o único arquivo a mexer para trocar identidade e assets.
+  Fonte: manual_marca_oratoria_exponencial.html (v1.0) e posts publicados.
+
+  Foto e logo: solte os arquivos em assets/ com os nomes abaixo (ou mude os
+  caminhos aqui). Enquanto o arquivo não existir, o carrossel mostra o
+  placeholder e o exportador recusa gerar a versão final.
+*/
+:root{
+  /* assets */
+  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente (samuel-novo, sentado, cortado na coxa) */
+  --logo:        "assets/logo.png";    /* LOGO HORIZONTAL 01 em Dourado Claro, versão para fundo escuro */
+
+  /* enquadramento da foto (atravessa o corte 1→2; px reais do Instagram) */
+  --foto-left:   630px;
+  --foto-top:    250px;
+  --foto-width:  800px;
+  --foto-height: 1100px;               /* encosta no rodapé do slide */
+
+  /* paleta do manual */
+  --navy:#0D1B3E;        /* Navy Profundo · fundo */
+  --navy-2:#1A2F5A;      /* Navy Médio · fundos secundários */
+  --blue:#1A4FAE;        /* Azul Marca */
+  --blue-light:#3B8BEB;  /* Azul Claro */
+  --gold:#C8941A;        /* Dourado */
+  --gold-light:#E8B84B;  /* Dourado Claro */
+  --white:#FFFFFF;
+  --gray:#A0A0A0;
+
+  /* papéis usados no carrossel */
+  --ink:var(--navy);
+  --ink-2:var(--navy-2);
+  --paper:var(--white);
+  --paper-ink:var(--navy);
+  --amber:var(--gold-light);           /* acento: palavras em destaque, curva, rótulos */
+  --amber-deep:var(--gold);            /* início do degradê da curva */
+  --glow:var(--blue-light);            /* luz de fundo, como nos posts */
+  --mute:#9AA6C4;                      /* texto de apoio (cinza azulado legível sobre o navy) */
+  --line:#24407A;
+  --rec:#E03030;                       /* bolinha do REC no slide 5 (vermelho do manual) */
+
+  /* fontes do manual: Barlow Condensed 900 nos títulos, Playfair Display em subtítulos, Barlow no corpo */
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --serif:"Playfair Display",Georgia,serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Barlow Condensed","Arial Narrow",sans-serif;  /* rótulos e numeração */
+}
+
+@font-face{font-family:"Barlow Condensed";font-weight:500;font-display:block;src:url(fonts/barlow-condensed-500.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:block;src:url(fonts/barlow-condensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:block;src:url(fonts/barlow-condensed-700.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:900;font-display:block;src:url(fonts/barlow-condensed-900.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:400;font-display:block;src:url(fonts/barlow-400.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:600;font-display:block;src:url(fonts/barlow-600.woff2) format("woff2")}
+@font-face{font-family:"Playfair Display";font-weight:400 900;font-display:block;src:url(fonts/playfair-display.woff2) format("woff2")}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:block;src:url(fonts/playfair-display-italic.woff2) format("woff2")}
