@@ -242,8 +242,8 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
     <!-- celular gravando -->
     <div style="position:absolute;left:710px;top:520px;width:270px;height:480px;border:4px solid var(--mute);border-radius:42px;padding:16px" data-a="tilt" data-d="700">
       <div style="width:100%;height:100%;border-radius:28px;background:var(--ink-2);position:relative;overflow:hidden">
-        <div class="mono" style="position:absolute;left:16px;top:16px;display:flex;align-items:center;gap:10px;font-size:20px;color:var(--paper)"><i style="width:14px;height:14px;border-radius:50%;background:var(--rec);display:inline-block"></i>REC</div>
-        <div class="mono" style="position:absolute;right:16px;top:16px;font-size:20px;color:var(--paper);font-variant-numeric:tabular-nums">38:12</div>
+        <div class="mono" style="position:absolute;left:16px;top:16px;display:flex;align-items:center;gap:10px;font-size:20px;color:var(--paper)"><i class="rec-dot" style="width:14px;height:14px;border-radius:50%;background:var(--rec);display:inline-block"></i>REC</div>
+        <div class="mono rec-time" style="position:absolute;right:16px;top:16px;font-size:20px;color:var(--paper);font-variant-numeric:tabular-nums">38:12</div>
         <svg viewBox="0 0 240 300" width="214" height="268" style="position:absolute;left:10px;bottom:0" aria-hidden="true"><path d="M120 40c32 0 54 25 54 58 0 27-14 47-30 55 50 10 84 50 94 110v37H2v-37c10-60 44-100 94-110-16-8-30-28-30-55 0-33 22-58 54-58z" style="fill:var(--line)"/></svg>
       </div>
     </div>
@@ -268,7 +268,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 
   <!-- 7 · DIA D -->
   <section class="s" style="left:6480px">
-    <svg style="position:absolute;left:0;top:0" width="1080" height="1350" viewBox="0 0 1080 1350" aria-hidden="true"><polygon points="460,0 620,0 1000,1350 80,1350" style="fill:var(--amber)" opacity=".07"/></svg>
+    <svg style="position:absolute;left:0;top:0" width="1080" height="1350" viewBox="0 0 1080 1350" aria-hidden="true"><polygon class="beam" points="460,0 620,0 1000,1350 80,1350" style="fill:var(--amber)" opacity=".07"/></svg>
     <div class="pg">07/08</div>
     <h2 class="hd" style="top:110px;font-size:230px;line-height:.85;color:var(--amber)" data-a="pop">Dia D</h2>
     <div class="txt" style="top:350px;width:920px" data-a="up" data-d="400">
@@ -294,6 +294,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 </div>
 </template>
 
+<script src="animacao.js"></script>
 <script>
 (async function(){
   const W=8640,H=1350,SW=1080;
@@ -323,11 +324,12 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
     // ondas concêntricas do manual (linhas sonoras), como textura de fundo
     const wv=node.querySelector('svg.waves');
     waves.forEach(([cx,cy,r0,n,color,op,seed])=>{
+      const g=document.createElementNS(NS,'g');g.setAttribute('class','wave');g.style.transformOrigin=cx+'px '+cy+'px';wv.appendChild(g);
       for(let j=0;j<n;j++){const R=r0+j*34;let d='';
         for(let a=0;a<=360;a+=4){const t=a*Math.PI/180,w=R+18*Math.sin(3*t+seed+j*.35)+10*Math.sin(5*t-seed*1.7+j*.2);
           d+=(a?'L':'M')+(cx+w*Math.cos(t)).toFixed(1)+' '+(cy+w*.82*Math.sin(t)).toFixed(1)}
         const pth=document.createElementNS(NS,'path');pth.setAttribute('d',d+'Z');pth.setAttribute('fill','none');
-        pth.style.stroke='var('+color+')';pth.setAttribute('stroke-width','2');pth.setAttribute('stroke-opacity',(op*(1-j/n*.6)).toFixed(3));wv.appendChild(pth)}});
+        pth.style.stroke='var('+color+')';pth.setAttribute('stroke-width','2');pth.setAttribute('stroke-opacity',(op*(1-j/n*.6)).toFixed(3));g.appendChild(pth)}});
     const svg=node.querySelector('svg.curve');
     let d='';for(let x=40;x<=8540;x+=20)d+=(x===40?'M':'L')+x+' '+yAt(x).toFixed(1);
     svg.querySelector('.cpath').setAttribute('d',d);
@@ -337,7 +339,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
       l.style.stroke='var(--mute)';l.setAttribute('stroke-opacity','.35');l.setAttribute('stroke-width','2');tg.appendChild(l)}
     const ng=svg.querySelector('.nodes');
     steps.forEach(([lab,x],i)=>{const y=yAt(x),last=i===steps.length-1;
-      const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',last?22:13);
+      const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',last?22:13);if(last)c.setAttribute('class','palco');
       c.style.fill=i>=6?'var(--amber)':'var(--ink)';c.style.stroke='var(--amber)';c.setAttribute('stroke-width','5');ng.appendChild(c);
       const t=document.createElementNS(NS,'text');t.textContent=lab.toUpperCase();
       t.setAttribute('x',last?x-40:x+26);t.setAttribute('y',last?y+70:y-22);t.setAttribute('text-anchor',last?'end':'start');
