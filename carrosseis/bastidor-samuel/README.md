@@ -6,9 +6,9 @@
 
 Tudo fica em **`marca.css`**:
 
-- **Foto do Samuel:** salve o recorte (PNG transparente, vertical, do peito pra cima) como `assets/samuel.png`. Ela atravessa o corte entre os slides 1 e 2. Para ajustar o enquadramento, mude `--foto-left`, `--foto-top`, `--foto-width` e `--foto-height`.
-- **Logo:** salve como `assets/logo.svg` (ou PNG, trocando o caminho em `--logo`). Use a versão para fundo escuro.
-- **Cores e fontes:** os tokens no topo de `marca.css`. As fontes ficam em `fonts/`.
+- **Foto do Samuel:** `assets/samuel.png` (recorte da FOTOS/DSC08059b, reduzido para 1600 px de altura). Ela atravessa o corte entre os slides 1 e 2. Para ajustar o enquadramento, mude `--foto-left`, `--foto-top`, `--foto-width` e `--foto-height`.
+- **Logo:** `assets/logo.png` (LOGO HORIZONTAL 01 em Dourado Claro, versão para fundo escuro). Para trocar, mude o arquivo ou o caminho em `--logo`.
+- **Cores e fontes:** os tokens no topo de `marca.css`, tirados do manual de marca v1.0 (Navy #0D1B3E, Dourado #C8941A / #E8B84B, Barlow Condensed 900, Playfair Display, Barlow). As fontes ficam em `fonts/`.
 
 Enquanto um asset não existir, o slide mostra o placeholder.
 

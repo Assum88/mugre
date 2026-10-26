@@ -1,5 +1,6 @@
 /*
   MARCA DO CARROSSEL: o único arquivo a mexer para trocar identidade e assets.
+  Fonte: manual_marca_oratoria_exponencial.html (v1.0) e posts publicados.
 
   Foto e logo: solte os arquivos em assets/ com os nomes abaixo (ou mude os
   caminhos aqui). Enquanto o arquivo não existir, o carrossel mostra o
@@ -7,31 +8,49 @@
 */
 :root{
   /* assets */
-  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente, vertical, do peito pra cima */
-  --logo:        "assets/logo.svg";    /* SVG ou PNG transparente, versão para fundo escuro */
+  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente (FOTOS/DSC08059b, reduzido) */
+  --logo:        "assets/logo.png";    /* LOGO HORIZONTAL 01 em Dourado Claro, versão para fundo escuro */
 
   /* enquadramento da foto (atravessa o corte 1→2; px reais do Instagram) */
-  --foto-left:   700px;
-  --foto-top:    150px;
-  --foto-width:  760px;
-  --foto-height: 1200px;               /* encosta no rodapé do slide */
+  --foto-left:   640px;
+  --foto-top:    170px;
+  --foto-width:  840px;
+  --foto-height: 1180px;               /* encosta no rodapé do slide */
 
-  /* cores (identidade provisória até chegar o manual do Oratória Exponencial) */
-  --ink:#0F1220;        /* fundo: palco apagado */
-  --ink-2:#181C2E;      /* superfícies */
-  --paper:#EDE7DA;      /* papel de roteiro */
-  --paper-ink:#1B1A22;
-  --amber:#FFB23F;      /* luz de palco: o único acento */
-  --mute:#8E93AE;       /* texto de apoio */
-  --line:#2A2F47;
-  --rec:#E5484D;        /* bolinha do REC no slide 5 */
+  /* paleta do manual */
+  --navy:#0D1B3E;        /* Navy Profundo · fundo */
+  --navy-2:#1A2F5A;      /* Navy Médio · fundos secundários */
+  --blue:#1A4FAE;        /* Azul Marca */
+  --blue-light:#3B8BEB;  /* Azul Claro */
+  --gold:#C8941A;        /* Dourado */
+  --gold-light:#E8B84B;  /* Dourado Claro */
+  --white:#FFFFFF;
+  --gray:#A0A0A0;
 
-  /* fontes (arquivos em fonts/) */
-  --display:"Big Shoulders Display","Oswald","Arial Narrow",Impact,sans-serif;
-  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  /* papéis usados no carrossel */
+  --ink:var(--navy);
+  --ink-2:var(--navy-2);
+  --paper:var(--white);
+  --paper-ink:var(--navy);
+  --amber:var(--gold-light);           /* acento: palavras em destaque, curva, rótulos */
+  --amber-deep:var(--gold);            /* início do degradê da curva */
+  --glow:var(--blue-light);            /* luz de fundo, como nos posts */
+  --mute:#9AA6C4;                      /* texto de apoio (cinza azulado legível sobre o navy) */
+  --line:#24407A;
+  --rec:#E03030;                       /* bolinha do REC no slide 5 (vermelho do manual) */
+
+  /* fontes do manual: Barlow Condensed 900 nos títulos, Playfair Display em subtítulos, Barlow no corpo */
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --serif:"Playfair Display",Georgia,serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Barlow Condensed","Arial Narrow",sans-serif;  /* rótulos e numeração */
 }
 
-@font-face{font-family:"Big Shoulders Display";font-weight:100 900;font-display:block;src:url(fonts/big-shoulders-display.woff2) format("woff2")}
-@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:block;src:url(fonts/instrument-sans.woff2) format("woff2")}
-@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:block;src:url(fonts/jetbrains-mono.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:500;font-display:block;src:url(fonts/barlow-condensed-500.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:block;src:url(fonts/barlow-condensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:block;src:url(fonts/barlow-condensed-700.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:900;font-display:block;src:url(fonts/barlow-condensed-900.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:400;font-display:block;src:url(fonts/barlow-400.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:600;font-display:block;src:url(fonts/barlow-600.woff2) format("woff2")}
+@font-face{font-family:"Playfair Display";font-weight:400 900;font-display:block;src:url(fonts/playfair-display.woff2) format("woff2")}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:block;src:url(fonts/playfair-display-italic.woff2) format("woff2")}

@@ -59,11 +59,13 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 /* ======== A TIRA (coordenadas em px reais do Instagram) ======== */
 .strip{position:relative;width:8640px;height:1350px;overflow:hidden;font-family:var(--body);color:var(--paper);
   background:
-    radial-gradient(900px 760px at 1080px 160px,color-mix(in srgb,var(--amber) 20%,transparent),transparent 70%),
+    radial-gradient(1000px 900px at 1080px 380px,color-mix(in srgb,var(--glow) 26%,transparent),transparent 70%),
+    radial-gradient(1200px 700px at 4300px 1350px,color-mix(in srgb,var(--blue) 22%,transparent),transparent 70%),
     radial-gradient(1100px 900px at 7020px 0px,color-mix(in srgb,var(--amber) 28%,transparent),transparent 70%),
     radial-gradient(900px 900px at 8500px 120px,color-mix(in srgb,var(--amber) 22%,transparent),transparent 70%),
     var(--ink)}
 .strip .grain{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);pointer-events:none}
+.strip svg.waves{position:absolute;inset:0;width:8640px;height:1350px}
 .strip svg.curve{position:absolute;inset:0;width:8640px;height:1350px;overflow:visible}
 .s{position:absolute;top:0;width:1080px;height:1350px}
 .s .pg{position:absolute;right:80px;top:80px;font:500 26px/1 var(--mono);color:var(--mute);font-variant-numeric:tabular-nums}
@@ -85,6 +87,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 .s .st b{font:700 18px/1.25 var(--mono);letter-spacing:.02em;text-transform:uppercase;color:var(--amber);margin-top:6px}
 .s .st span{font:400 30px/1.28 var(--body);color:var(--paper)}
 .mono{font-family:var(--mono)}
+.s .tx.serif{font-family:var(--serif);font-style:italic}
 
 /* foto do Samuel: o <img> só aparece quando o arquivo de marca.css carrega; senão fica a silhueta */
 .foto{position:absolute;left:var(--foto-left);top:var(--foto-top);width:var(--foto-width);height:var(--foto-height)}
@@ -94,7 +97,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 .foto.ok img{display:block}
 .foto.ok .ph{display:none}
 /* logo oficial */
-.logo{position:absolute;left:80px;top:1110px;width:380px;height:140px}
+.logo{position:absolute;left:80px;top:1150px;width:440px;height:100px}
 .logo img{display:none;width:100%;height:100%;object-fit:contain;object-position:left center}
 .logo .ph{width:100%;height:100%;border:3px dashed var(--mute);border-radius:8px;display:grid;place-items:center;font:500 24px/1 var(--mono);letter-spacing:.14em;color:var(--mute)}
 .logo.ok img{display:block}
@@ -152,10 +155,11 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
 
 <template id="stripTpl">
 <div class="strip">
+  <svg class="waves" viewBox="0 0 8640 1350" aria-hidden="true"></svg>
   <svg class="curve" viewBox="0 0 8640 1350" aria-hidden="true">
     <defs>
       <linearGradient id="cg" x1="0" x2="1" y1="0" y2="0">
-        <stop offset="0" style="stop-color:var(--mute);stop-opacity:.35"/>
+        <stop offset="0" style="stop-color:var(--amber-deep);stop-opacity:.45"/>
         <stop offset=".55" style="stop-color:var(--amber);stop-opacity:.7"/>
         <stop offset="1" style="stop-color:var(--amber)"/>
       </linearGradient>
@@ -171,7 +175,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
     <div class="lab" data-a="up">Bastidor</div>
     <div class="pg">01/08</div>
     <h2 class="hd" style="top:240px;width:680px;font-size:150px;line-height:.9" data-a="mask" data-d="100">Como eu preparo uma <em>palestra</em></h2>
-    <div class="txt" style="top:830px;width:600px" data-a="up" data-d="500"><p class="tx">Do dia em que o convite chega até os minutos antes de subir no palco.</p></div>
+    <div class="txt" style="top:830px;width:600px" data-a="up" data-d="500"><p class="tx serif">Do dia em que o convite chega até os minutos antes de subir no palco.</p></div>
     <div class="mono" style="position:absolute;left:80px;top:1080px;font-size:26px;color:var(--amber);letter-spacing:.1em" data-a="up" data-d="800">ARRASTA →</div>
     <!-- foto atravessa o corte 1→2 -->
     <div class="foto" data-a="up">
@@ -283,7 +287,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
   <section class="s" style="left:7560px">
     <div class="pg">08/08</div>
     <h2 class="hd" style="top:160px;width:600px;font-size:84px" data-a="mask">Se você tem uma apresentação chegando, <em>salva este post.</em></h2>
-    <div class="txt" style="top:530px;width:560px" data-a="up" data-d="500"><p class="tx" style="font-size:40px">E me conta nos comentários: qual dessas etapas você costuma pular?</p></div>
+    <div class="txt" style="top:530px;width:560px" data-a="up" data-d="500"><p class="tx serif" style="font-size:40px">E me conta nos comentários: qual dessas etapas você costuma pular?</p></div>
     <!-- logo oficial -->
     <div class="logo" data-a="up" data-d="800"><img alt="Oratória Exponencial"><div class="ph">LOGO OFICIAL</div></div>
   </section>
@@ -306,6 +310,8 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
   // curva exponencial: plana no bastidor, sobe no palco
   const base=1215, A=1035, k=14;
   const yAt=x=>{const t=x/W;return base-A*(Math.exp(k*t)-1)/(Math.exp(k)-1)};
+  // [cx,cy,raio inicial,anéis,cor,opacidade,semente]
+  const waves=[[1080,560,120,16,'--blue-light',.20,0],[3780,1300,160,12,'--blue-light',.12,2],[6200,80,140,12,'--gold',.14,4],[8380,260,90,14,'--gold-light',.18,1]];
   const steps=[['Bastidor',80],['Convite',1160],['Pesquisa',2240],['Estrutura',3320],['Ensaio',4400],['Véspera',5480],['Dia D',6560],['Palco',8460]];
 
   function buildStrip(){
@@ -313,7 +319,16 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
     node.querySelectorAll('[data-d]').forEach(el=>el.style.setProperty('--d',el.dataset.d));
     if(foto){const f=node.querySelector('.foto');f.querySelector('img').src=foto;f.classList.add('ok')}
     if(logo){const l=node.querySelector('.logo');l.querySelector('img').src=logo;l.classList.add('ok')}
-    const svg=node.querySelector('svg.curve'),NS='http://www.w3.org/2000/svg';
+    const NS='http://www.w3.org/2000/svg';
+    // ondas concêntricas do manual (linhas sonoras), como textura de fundo
+    const wv=node.querySelector('svg.waves');
+    waves.forEach(([cx,cy,r0,n,color,op,seed])=>{
+      for(let j=0;j<n;j++){const R=r0+j*34;let d='';
+        for(let a=0;a<=360;a+=4){const t=a*Math.PI/180,w=R+18*Math.sin(3*t+seed+j*.35)+10*Math.sin(5*t-seed*1.7+j*.2);
+          d+=(a?'L':'M')+(cx+w*Math.cos(t)).toFixed(1)+' '+(cy+w*.82*Math.sin(t)).toFixed(1)}
+        const pth=document.createElementNS(NS,'path');pth.setAttribute('d',d+'Z');pth.setAttribute('fill','none');
+        pth.style.stroke='var('+color+')';pth.setAttribute('stroke-width','2');pth.setAttribute('stroke-opacity',(op*(1-j/n*.6)).toFixed(3));wv.appendChild(pth)}});
+    const svg=node.querySelector('svg.curve');
     let d='';for(let x=40;x<=8540;x+=20)d+=(x===40?'M':'L')+x+' '+yAt(x).toFixed(1);
     svg.querySelector('.cpath').setAttribute('d',d);
     const tg=svg.querySelector('.ticks');
