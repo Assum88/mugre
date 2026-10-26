@@ -12,7 +12,7 @@ const FPS = 30, SLIDE = 0.6; // transição da versão contínua, em s
 (async () => {
   const dir = __dirname, out = join(dir, 'video'), tmp = join(out, '.quadros');
   mkdirSync(out, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ args: ['--allow-file-access-from-files'] }); // máscara do brilho no logo lê o PNG local
   const page = await browser.newPage({ viewport: { width: 8640, height: 1350 }, deviceScaleFactor: 1 });
   const clips = [], durs = [];
 

@@ -21,6 +21,6 @@ Enquanto um asset não existir, o slide mostra o placeholder.
 
 `node animar.js` (precisa de ffmpeg) gera em `video/`:
 - `bastidor-samuel-01..08.mp4`: um vídeo por slide, em 1080×1350 e 30 fps, para montar o carrossel com vídeos.
-- `bastidor-samuel-tira.mp4`: os 8 em sequência, com cada slide deslizando para a esquerda (cerca de 49 s). Serve para Reels ou para o feed.
+- `bastidor-samuel-tira.mp4`: os 8 em sequência, com cada slide deslizando para a esquerda (cerca de 44 s). Serve para Reels ou para o feed.
 
-O movimento de cada slide fica em `animacao.js`. Cada quadro é capturado com o relógio parado, então o resultado sai igual toda vez.
+O movimento de cada slide fica em `animacao.js` e segue as referências carrossel-custo v02 e imprevisto v04. O slide já abre montado, igual ao PNG, e só os detalhes se mexem: o pulso de luz na curva, o brilho no dourado, a poeira dourada, as palavras acendendo e o objeto de cada etapa. Os vídeos têm 6 s e fecham em loop. Cada quadro é capturado com o relógio parado, então o resultado sai igual toda vez.

@@ -311,6 +311,7 @@ body.export #exportRoot{display:block;width:8640px;height:1350px}
   // curva exponencial: plana no bastidor, sobe no palco
   const base=1215, A=1035, k=14;
   const yAt=x=>{const t=x/W;return base-A*(Math.exp(k*t)-1)/(Math.exp(k)-1)};
+  window.__yAt=yAt; // usado por animacao.js
   // [cx,cy,raio inicial,anéis,cor,opacidade,semente]
   const waves=[[1080,560,120,16,'--blue-light',.20,0],[3780,1300,160,12,'--blue-light',.12,2],[6200,80,140,12,'--gold',.14,4],[8380,260,90,14,'--gold-light',.18,1]];
   const steps=[['Bastidor',80],['Convite',1160],['Pesquisa',2240],['Estrutura',3320],['Ensaio',4400],['Véspera',5480],['Dia D',6560],['Palco',8460]];
