@@ -8,14 +8,14 @@
 */
 :root{
   /* assets */
-  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente (FOTOS/DSC08059b, reduzido) */
+  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente (samuel-novo, sentado, cortado na coxa) */
   --logo:        "assets/logo.png";    /* LOGO HORIZONTAL 01 em Dourado Claro, versão para fundo escuro */
 
   /* enquadramento da foto (atravessa o corte 1→2; px reais do Instagram) */
-  --foto-left:   640px;
-  --foto-top:    170px;
-  --foto-width:  840px;
-  --foto-height: 1180px;               /* encosta no rodapé do slide */
+  --foto-left:   630px;
+  --foto-top:    250px;
+  --foto-width:  800px;
+  --foto-height: 1100px;               /* encosta no rodapé do slide */
 
   /* paleta do manual */
   --navy:#0D1B3E;        /* Navy Profundo · fundo */
