@@ -1,0 +1,37 @@
+/*
+  MARCA DO CARROSSEL: o único arquivo a mexer para trocar identidade e assets.
+
+  Foto e logo: solte os arquivos em assets/ com os nomes abaixo (ou mude os
+  caminhos aqui). Enquanto o arquivo não existir, o carrossel mostra o
+  placeholder e o exportador recusa gerar a versão final.
+*/
+:root{
+  /* assets */
+  --foto-samuel: "assets/samuel.png";  /* recorte PNG transparente, vertical, do peito pra cima */
+  --logo:        "assets/logo.svg";    /* SVG ou PNG transparente, versão para fundo escuro */
+
+  /* enquadramento da foto (atravessa o corte 1→2; px reais do Instagram) */
+  --foto-left:   700px;
+  --foto-top:    150px;
+  --foto-width:  760px;
+  --foto-height: 1200px;               /* encosta no rodapé do slide */
+
+  /* cores (identidade provisória até chegar o manual do Oratória Exponencial) */
+  --ink:#0F1220;        /* fundo: palco apagado */
+  --ink-2:#181C2E;      /* superfícies */
+  --paper:#EDE7DA;      /* papel de roteiro */
+  --paper-ink:#1B1A22;
+  --amber:#FFB23F;      /* luz de palco: o único acento */
+  --mute:#8E93AE;       /* texto de apoio */
+  --line:#2A2F47;
+  --rec:#E5484D;        /* bolinha do REC no slide 5 */
+
+  /* fontes (arquivos em fonts/) */
+  --display:"Big Shoulders Display","Oswald","Arial Narrow",Impact,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+
+@font-face{font-family:"Big Shoulders Display";font-weight:100 900;font-display:block;src:url(fonts/big-shoulders-display.woff2) format("woff2")}
+@font-face{font-family:"Instrument Sans";font-weight:400 700;font-display:block;src:url(fonts/instrument-sans.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:block;src:url(fonts/jetbrains-mono.woff2) format("woff2")}

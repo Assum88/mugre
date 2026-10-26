@@ -1,0 +1,11 @@
+{
+  "name": "carrossel-bastidor-samuel",
+  "private": true,
+  "scripts": {
+    "exportar": "node exportar.js",
+    "rascunho": "node exportar.js --rascunho"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
