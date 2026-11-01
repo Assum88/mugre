@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 from pathlib import Path
@@ -22,7 +23,7 @@ def canonical(value):
     value = value.strip()
     url = urlsplit(value)
     if url.scheme != 'https':
-        raise ValueError('Use um link https público do Instagram ou Facebook.')
+        raise ValueError('Use um link https público do Instagram, Facebook ou X.')
     host = url.netloc.lower().split(':', 1)[0].rstrip('.')
 
     if host in ('instagram.com', 'www.instagram.com', 'm.instagram.com'):
@@ -40,10 +41,16 @@ def canonical(value):
             return value
         raise ValueError('Use o link de um Reel ou vídeo individual público do Facebook.')
 
+    if host in ('x.com', 'www.x.com', 'twitter.com', 'www.twitter.com', 'mobile.twitter.com', 'mobile.x.com'):
+        match = re.fullmatch(r'/([A-Za-z0-9_]{1,15})/status/([0-9]{1,25})(?:/video/[0-9])?/?', url.path)
+        if match:
+            return 'https://x.com/' + match[1] + '/status/' + match[2]
+        raise ValueError('Use o link de um post com vídeo do X.')
+
     if host == 'fb.watch' and re.fullmatch(r'/[A-Za-z0-9_-]+/?', url.path):
         return value
 
-    raise ValueError('Use um link público do Instagram ou Facebook.')
+    raise ValueError('Use um link público do Instagram, Facebook ou X.')
 
 def update(job, **fields):
     with lock:
@@ -68,6 +75,11 @@ def run(job, url):
             duration = float(json.loads(probe.stdout)['format']['duration'])
             if duration <= 0 or duration > 180:
                 raise ValueError('Esta versão aceita vídeos de até 3 minutos.')
+            update(job, status='frames', message='Montando a grade de frames…')
+            sheet = folder + '/grade.jpg'
+            rate = 16 / duration
+            subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(files[0]), '-vf', f'fps={rate:.5f},scale=320:-2,tile=4x4:padding=4:color=black', '-frames:v', '1', '-q:v', '6', sheet], capture_output=True, check=True, timeout=60)
+            sheet = 'data:image/jpeg;base64,' + base64.b64encode(Path(sheet).read_bytes()).decode()
             update(job, status='audio', message='Preparando o áudio…')
             audio = folder + '/audio.wav'
             subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(files[0]), '-vn', '-ac', '1', '-ar', '16000', audio], capture_output=True, check=True, timeout=45)
@@ -77,9 +89,10 @@ def run(job, url):
             if result.returncode:
                 raise ValueError('O motor de transcrição falhou. Tente novamente em alguns instantes.')
             text = result.stdout.decode().strip()
-            if not text:
-                raise ValueError('Não foi possível reconhecer fala nesse vídeo.')
-        update(job, status='done', message='Transcrição pronta. Revise nomes e termos técnicos.', text=text)
+        if text:
+            update(job, status='done', message='Transcrição e grade de frames prontas. Revise nomes e termos técnicos.', text=text, sheet=sheet)
+        else:
+            update(job, status='done', message='Não há fala nesse vídeo, mas a grade de frames está pronta.', text='', sheet=sheet)
     except ValueError as exc:
         update(job, status='error', message=str(exc))
     except subprocess.TimeoutExpired:
@@ -110,7 +123,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Cache-Control', 'no-store')
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
-        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'")
+        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'")
         self.end_headers()
         self.wfile.write(data)
 
@@ -141,7 +154,7 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError('Pedido inválido.')
             url = canonical(json.loads(self.rfile.read(size)).get('url'))
         except (ValueError, AttributeError):
-            return self.reply(400, {'message': 'Cole um link válido de Reel ou vídeo público do Instagram ou Facebook.'})
+            return self.reply(400, {'message': 'Cole um link válido de vídeo público do Instagram, Facebook ou X.'})
         if not busy.acquire(blocking=False):
             return self.reply(429, {'message': 'Já existe uma transcrição em andamento. Aguarde terminar.'})
         job = secrets.token_urlsafe(24)
